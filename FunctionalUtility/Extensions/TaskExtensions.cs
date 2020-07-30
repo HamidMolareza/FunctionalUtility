@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace FunctionalUtility.FunctionalExtensions {
+namespace FunctionalUtility.Extensions {
     public static class TaskExtensions {
 
         #region Task

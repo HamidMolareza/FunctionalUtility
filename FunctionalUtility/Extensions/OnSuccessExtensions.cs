@@ -1,8 +1,9 @@
 using System;
 using System.Threading.Tasks;
+using FunctionalUtility.ResultDetails;
 using FunctionalUtility.ResultUtility;
 
-namespace FunctionalUtility.FunctionalExtensions {
+namespace FunctionalUtility.Extensions {
     public static class OnSuccessExtensions {
 
         #region OnSuccess
@@ -61,40 +62,54 @@ namespace FunctionalUtility.FunctionalExtensions {
             success () :
             MethodResult.Fail (@this.Detail);
 
-        public static MethodResult<TResult> OnSuccess<TSource, TResult> (
-                this MethodResult<TSource> @this,
-                Func<TSource, TResult> success) =>
+        public static MethodResult<TResult> OnSuccess<TSource, TResult>(
+            this MethodResult<TSource> @this,
+            Func<TSource, TResult> success) =>
             @this.IsSuccess ?
-            success (@this.Value).Map (MethodResult<TResult>.Ok) :
-            MethodResult<TResult>.Fail (@this.Detail);
+                MethodResult<TResult>.Ok(success(@this.Value)) :
+                MethodResult<TResult>.Fail(@this.Detail);
 
         public static MethodResult<TResult> OnSuccess<TSource, TResult> (
                 this MethodResult<TSource> @this,
                 Func<TResult> success) =>
             @this.IsSuccess ?
-            success ().Map (MethodResult<TResult>.Ok) :
-            MethodResult<TResult>.Fail (@this.Detail);
+                MethodResult<TResult>.Ok(success()) :
+                MethodResult<TResult>.Fail(@this.Detail);
 
         public static MethodResult<TResult> OnSuccess<TResult> (
                 this MethodResult @this,
                 Func<TResult> success) =>
             @this.IsSuccess ?
-            success ().Map (MethodResult<TResult>.Ok) :
-            MethodResult<TResult>.Fail (@this.Detail);
+                MethodResult<TResult>.Ok(success()) :
+                MethodResult<TResult>.Fail(@this.Detail);
+
+        public static MethodResult OnSuccess<TSource>(
+            this MethodResult<TSource> @this,
+            Action<TSource> success)
+        {
+            if(!@this.IsSuccess)
+                return MethodResult.Fail(@this.Detail);
+            success(@this.Value);
+            return MethodResult.Ok();
+        }
 
         public static MethodResult OnSuccess<TSource> (
                 this MethodResult<TSource> @this,
-                Action<TSource> success) =>
-            @this.IsSuccess ? @this.Tee (() => success (@this.Value)).MapMethodResult () : MethodResult.Fail (@this.Detail);
-
-        public static MethodResult OnSuccess<TSource> (
-                this MethodResult<TSource> @this,
-                Action success) =>
-            @this.IsSuccess ? @this.Tee (success).MapMethodResult () : MethodResult.Fail (@this.Detail);
+                Action success) {
+            if(!@this.IsSuccess)
+                return MethodResult.Fail(@this.Detail);
+            success();
+            return MethodResult.Ok();
+        }
 
         public static MethodResult OnSuccess (
             this MethodResult @this,
-            Action success) => @this.IsSuccess ? @this.Tee (success) : MethodResult.Fail (@this.Detail);
+            Action success) {
+            if(!@this.IsSuccess)
+                return MethodResult.Fail(@this.Detail);
+            success();
+            return MethodResult.Ok();
+        }
 
         #endregion
 
@@ -565,7 +580,6 @@ namespace FunctionalUtility.FunctionalExtensions {
         public static Task<MethodResult<TResult>> TryOnSuccessAsync<TResult> (
                 this MethodResult @this,
                 Func<Task<MethodResult<TResult>>> success,
-
                 int numOfTry = 1) =>
             @this.OnSuccessAsync (() => TryExtensions.TryAsync (success, numOfTry));
 

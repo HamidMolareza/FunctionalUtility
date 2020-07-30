@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using FunctionalUtility.ResultUtility;
 
-namespace FunctionalUtility.FunctionalExtensions {
+namespace FunctionalUtility.Extensions {
     public static class UsingExtensions {
 
         #region Using

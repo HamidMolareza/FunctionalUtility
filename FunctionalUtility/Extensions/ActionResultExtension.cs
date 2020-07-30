@@ -2,7 +2,7 @@
 using FunctionalUtility.ResultUtility;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FunctionalUtility.FunctionalExtensions {
+namespace FunctionalUtility.Extensions {
     public class MethodResultObject : ObjectResult {
         public MethodResultObject (MethodResultBase methodResult):
             base (methodResult.IsSuccess ? null : methodResult.Detail) {

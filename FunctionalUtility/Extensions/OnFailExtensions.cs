@@ -1,8 +1,9 @@
 using System;
 using System.Threading.Tasks;
+using FunctionalUtility.ResultDetails;
 using FunctionalUtility.ResultUtility;
 
-namespace FunctionalUtility.FunctionalExtensions {
+namespace FunctionalUtility.Extensions {
     public static class OnFailExtensions {
 
         #region OnFail
@@ -51,20 +52,201 @@ namespace FunctionalUtility.FunctionalExtensions {
             @this.IsSuccess ?
             @this : fail ();
 
-        public static MethodResult OnFail (
-                this MethodResult @this,
-                Action fail) =>
-            @this.IsSuccess ?
-            @this : @this.Tee (fail);
+        public static MethodResult OnFail(
+            this MethodResult @this,
+            Action fail)
+        {
+            if (!@this.IsSuccess)
+                fail();
+            return @this;
+        }
 
         public static MethodResult<T> OnFail<T> (
                 this MethodResult<T> @this,
-                Action<MethodResult<T>> fail) =>
-            @this.IsSuccess ?
-            @this : @this.Tee (fail);
+                Action<MethodResult<T>> fail) {
+            if (!@this.IsSuccess)
+                fail(@this);
+            return @this;
+        }
+        
+        public static MethodResult<T> OnFail<T> (
+            this MethodResult<T> @this,
+            Action<T> fail) {
+            if (!@this.IsSuccess)
+                fail(@this.Value);
+            return @this;
+        }
 
         #endregion
 
+        #region TryOnFail
+
+            public static MethodResult<T> TryOnFail<T>(
+                this MethodResult<T> @this,
+                Func<ErrorDetail> errorDetail)
+            {
+                if (@this.IsSuccess)
+                    return @this;
+
+                try
+                {
+                    return @this.Fail(errorDetail());
+                }
+                catch (Exception e)
+                {
+                    return @this.Fail(new ExceptionError(e));
+                }
+            }
+
+            public static MethodResult TryOnFail (
+                this MethodResult @this,
+                Func<ErrorDetail> errorDetail) {
+                if (@this.IsSuccess)
+                    return @this;
+
+                try
+                {
+                    return @this.Fail(errorDetail());
+                }
+                catch (Exception e)
+                {
+                    return @this.Fail(new ExceptionError(e));
+                }
+            }
+
+        public static MethodResult<T> TryOnFail<T> (
+                this MethodResult<T> @this,
+                Func<MethodResult<T>, MethodResult<T>> fail){
+            if (@this.IsSuccess)
+                return @this;
+
+            try
+            {
+                return fail(@this);
+            }
+            catch (Exception e)
+            {
+                return @this.Fail(new ExceptionError(e));
+            }
+        }
+        
+        public static MethodResult<T> TryOnFail<T> (
+            this MethodResult<T> @this,
+            Action<T> fail){
+            if (@this.IsSuccess)
+                return @this;
+
+            try
+            {
+                 fail(@this.Value);
+                 return @this;
+            }
+            catch (Exception e)
+            {
+                return @this.Fail(new ExceptionError(e));
+            }
+        }
+        
+        public static MethodResult<T> TryOnFail<T> (
+            this MethodResult<T> @this,
+            Func<T, MethodResult<T>> fail){
+            if (@this.IsSuccess)
+                return @this;
+
+            try
+            {
+                return fail(@this.Value);
+            }
+            catch (Exception e)
+            {
+                return @this.Fail(new ExceptionError(e));
+            }
+        }
+
+        public static MethodResult<T> TryOnFail<T> (
+                this MethodResult<T> @this,
+                Func<MethodResult<T>> fail){
+            if (@this.IsSuccess)
+                return @this;
+
+            try
+            {
+                return fail();
+            }
+            catch (Exception e)
+            {
+                return @this.Fail(new ExceptionError(e));
+            }
+        }
+
+        public static MethodResult TryOnFail (
+                this MethodResult @this,
+                Func<MethodResult, MethodResult> fail){
+            if (@this.IsSuccess)
+                return @this;
+
+            try
+            {
+                return fail(@this);
+            }
+            catch (Exception e)
+            {
+                return @this.Fail(new ExceptionError(e));
+            }
+        }
+
+        public static MethodResult TryOnFail (
+                this MethodResult @this,
+                Func<MethodResult> fail){
+            if (@this.IsSuccess)
+                return @this;
+
+            try
+            {
+                return fail();
+            }
+            catch (Exception e)
+            {
+                return @this.Fail(new ExceptionError(e));
+            }
+        }
+
+        public static MethodResult TryOnFail (
+                this MethodResult @this,
+                Action fail) {
+            if (@this.IsSuccess)
+                return @this;
+
+            try
+            {
+                 fail();
+                 return @this;
+            }
+            catch (Exception e)
+            {
+                return @this.Fail(new ExceptionError(e));
+            }
+        }
+
+        public static MethodResult<T> TryOnFail<T> (
+                this MethodResult<T> @this,
+                Action<MethodResult<T>> fail) {
+            if (@this.IsSuccess)
+                return @this;
+
+            try
+            {
+                 fail(@this);
+                 return @this;
+            }
+            catch (Exception e)
+            {
+                return @this.Fail(new ExceptionError(e));
+            }
+        }
+
+        #endregion
+        
         #region OnFailOperateWhen
 
         public static MethodResult OnFailOperateWhen (

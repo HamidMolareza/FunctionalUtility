@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using FunctionalUtility.ResultUtility;
 
-namespace FunctionalUtility.FunctionalExtensions {
+namespace FunctionalUtility.Extensions {
     public static class TeeExtensions {
 
         #region Tee
@@ -51,74 +51,76 @@ namespace FunctionalUtility.FunctionalExtensions {
 
         #region TeeOnSuccess
 
-        public static MethodResult<T> TeeOnSuccess<T> (
-                this MethodResult<T> @this,
-                Action<T> action) => @this
-            .OnSuccess (value =>
-                value.Tee (action)
-                .Map (_ => @this)
-            );
+        public static MethodResult<T> TeeOnSuccess<T>(
+            this MethodResult<T> @this,
+            Action<T> action)
+        {
+            if (@this.IsSuccess)
+                action(@this.Value);
+            return @this;
+        }
 
         public static MethodResult<T> TeeOnSuccess<T> (
                 this MethodResult<T> @this,
                 Action action) => @this
             .OnSuccess (() => @this.Tee (action));
 
-        public static MethodResult TeeOnSuccess (
-                this MethodResult @this,
-                Action action) => @this
-            .OnSuccess (() =>
-                @this.Tee (action));
+        public static MethodResult TeeOnSuccess(
+            this MethodResult @this,
+            Action action) =>
+            @this.OnSuccess(() => @this.Tee(action));
 
-        public static MethodResult<TSource> TeeOnSuccess<TSource, TResult> (
-                this MethodResult<TSource> @this,
-                Func<TSource, TResult> function) => @this
-            .OnSuccess (value =>
-                value.Tee (function)
-                .Map (_ => @this)
-            );
+        public static MethodResult<TSource> TeeOnSuccess<TSource, TResult>(
+            this MethodResult<TSource> @this,
+            Func<TSource, TResult> function)
+        {
+            if (@this.IsSuccess)
+                function(@this.Value);
+            return @this;
+        }
 
         public static MethodResult<TSource> TeeOnSuccess<TSource, TResult> (
                 this MethodResult<TSource> @this,
                 Func<TResult> function) => @this
             .OnSuccess (() => @this.Tee (function));
 
-        public static MethodResult TeeOnSuccess<TResult> (
-                this MethodResult @this,
-                Func<TResult> function) => @this
-            .OnSuccess (() =>
-                @this.Tee (function));
+        public static MethodResult TeeOnSuccess<TResult>(
+            this MethodResult @this,
+            Func<TResult> function) =>
+            @this.OnSuccess(() => @this.Tee(function));
 
         #endregion
 
         #region TeeOnSuccessAsync
 
-        public static Task<MethodResult<T>> TeeOnSuccessAsync<T> (
+        public static async Task<MethodResult<T>> TeeOnSuccessAsync<T> (
                 this Task<MethodResult<T>> @this,
-                Action<T> action) => @this
-            .OnSuccessAsync (value =>
-                value.Tee (action)
-                .Map (_ => @this)
-            );
+                Action<T> action)
+        {
+            var t = await @this;
+            if (t.IsSuccess)
+                action(t.Value);
+            return t;
+        }
 
         public static Task<MethodResult<T>> TeeOnSuccessAsync<T> (
                 this Task<MethodResult<T>> @this,
                 Action action) => @this
             .OnSuccessAsync (() => @this.Tee (action));
 
-        public static Task<MethodResult> TeeOnSuccessAsync (
-                this Task<MethodResult> @this,
-                Action action) => @this
-            .OnSuccessAsync (() =>
-                @this.Tee (action));
+        public static Task<MethodResult> TeeOnSuccessAsync(
+            this Task<MethodResult> @this,
+            Action action) =>
+            @this.OnSuccessAsync(() => @this.Tee(action));
 
-        public static Task<MethodResult<TSource>> TeeOnSuccessAsync<TSource, TResult> (
+        public static async Task<MethodResult<TSource>> TeeOnSuccessAsync<TSource, TResult> (
                 this Task<MethodResult<TSource>> @this,
-                Func<TSource, TResult> function) => @this
-            .OnSuccessAsync (value =>
-                value.Tee (function)
-                .Map (_ => @this)
-            );
+                Func<TSource, TResult> function) {
+            var t = await @this;
+            if (t.IsSuccess)
+                function(t.Value);
+            return t;
+        }
 
         public static Task<MethodResult<TSource>> TeeOnSuccessAsync<TSource, TResult> (
                 this Task<MethodResult<TSource>> @this,
@@ -127,9 +129,8 @@ namespace FunctionalUtility.FunctionalExtensions {
 
         public static Task<MethodResult> TeeOnSuccessAsync<TResult> (
                 this Task<MethodResult> @this,
-                Func<TResult> function) => @this
-            .OnSuccessAsync (() =>
-                @this.Tee (function));
+                Func<TResult> function) => 
+            @this.OnSuccessAsync (() => @this.Tee (function));
 
         #endregion
 

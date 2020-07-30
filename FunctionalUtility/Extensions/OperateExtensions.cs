@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using FunctionalUtility.ResultUtility;
 
-namespace FunctionalUtility.FunctionalExtensions {
+namespace FunctionalUtility.Extensions {
     public static class OperateExtensions {
 
         #region OperateWhen
@@ -526,8 +526,8 @@ namespace FunctionalUtility.FunctionalExtensions {
             MethodResult predicate,
             Func<MethodResult> function
         ) => predicate.OnSuccess (function).MapMethodResult (
-            onSuccess: () => MethodResult<T>.Ok (@this),
-            onFail : MethodResult<T>.Fail
+            onSuccessFunction: () => MethodResult<T>.Ok (@this),
+            onFailFunction : MethodResult<T>.Fail
         );
 
         public static T TeeOperateWhen<T> (

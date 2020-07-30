@@ -1,7 +1,8 @@
 ﻿using System;
+using FunctionalUtility.ResultDetails;
 using FunctionalUtility.ResultUtility;
 
-namespace FunctionalUtility.FunctionalExtensions {
+namespace FunctionalUtility.Extensions {
     public static class FailExtensions {
 
         #region FailWhen
@@ -103,12 +104,12 @@ namespace FunctionalUtility.FunctionalExtensions {
         #region Fail
 
         public static MethodResult Fail (
-            this MethodResult @this,
+            this MethodResult _,
             ErrorDetail errorDetail
         ) => MethodResult.Fail (errorDetail);
 
         public static MethodResult<T> Fail<T> (
-            this MethodResult<T> @this,
+            this MethodResult<T> _,
             ErrorDetail errorDetail
         ) => MethodResult<T>.Fail (errorDetail);
 

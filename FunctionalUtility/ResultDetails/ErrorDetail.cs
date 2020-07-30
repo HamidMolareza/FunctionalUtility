@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
+using FunctionalUtility.ResultUtility;
 
-namespace FunctionalUtility.ResultUtility
+namespace FunctionalUtility.ResultDetails
 {
     public class ErrorDetail : ResultDetail {
         public ErrorDetail (int statusCode, string? title = null, string? message = null,

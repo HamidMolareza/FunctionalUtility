@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Http;
 
-namespace FunctionalUtility.ResultUtility
+namespace FunctionalUtility.ResultDetails
 {
     public class ExceptionError : ErrorDetail {
         public ExceptionError (Exception exception, string? title = null, string? message = null):

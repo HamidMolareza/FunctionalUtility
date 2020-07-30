@@ -1,13 +1,13 @@
 using System;
 using System.Text.Json;
+using FunctionalUtility.ResultDetails;
 using FunctionalUtility.ResultUtility;
 
-namespace FunctionalUtility.FunctionalExtensions {
+namespace FunctionalUtility.Extensions {
     public static class ThrowExceptionExtensions {
        
         #region ThrowException
-
-        //TODO: Check
+        
         public static void ThrowException (this ResultDetail @this) {
             throw @this
             switch {

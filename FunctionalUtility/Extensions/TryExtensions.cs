@@ -1,8 +1,9 @@
 using System;
 using System.Threading.Tasks;
+using FunctionalUtility.ResultDetails;
 using FunctionalUtility.ResultUtility;
 
-namespace FunctionalUtility.FunctionalExtensions {
+namespace FunctionalUtility.Extensions {
     public static class TryExtensions {
 
         #region Try
@@ -75,6 +76,7 @@ namespace FunctionalUtility.FunctionalExtensions {
         ) {
             var counter = 0;
             while (true) {
+                
                 try {
                     return MethodResult<T>.Ok (await function ());
                 } catch (Exception e) {
@@ -82,6 +84,7 @@ namespace FunctionalUtility.FunctionalExtensions {
                     if (counter >= numOfTry)
                         return MethodResult<T>.Fail (new ExceptionError (e));
                 }
+                
             }
         }
 
@@ -91,6 +94,7 @@ namespace FunctionalUtility.FunctionalExtensions {
         ) {
             var counter = 0;
             while (true) {
+                
                 try {
                     return await function ();
                 } catch (Exception e) {
@@ -98,6 +102,7 @@ namespace FunctionalUtility.FunctionalExtensions {
                     if (counter >= numOfTry)
                         return MethodResult<T>.Fail (new ExceptionError (e));
                 }
+                
             }
         }
 
@@ -107,6 +112,7 @@ namespace FunctionalUtility.FunctionalExtensions {
         ) {
             var counter = 0;
             while (true) {
+                
                 try {
                     await function ();
                     return MethodResult.Ok ();
@@ -115,6 +121,7 @@ namespace FunctionalUtility.FunctionalExtensions {
                     if (counter >= numOfTry)
                         return MethodResult.Fail (new ExceptionError (e));
                 }
+                
             }
         }
 
@@ -124,6 +131,7 @@ namespace FunctionalUtility.FunctionalExtensions {
         ) {
             var counter = 0;
             while (true) {
+                
                 try {
                     return await function ();
                 } catch (Exception e) {
@@ -131,6 +139,7 @@ namespace FunctionalUtility.FunctionalExtensions {
                     if (counter >= numOfTry)
                         return MethodResult.Fail (new ExceptionError (e));
                 }
+                
             }
         }
 

@@ -1,6 +1,6 @@
 namespace FunctionalUtility.ResultUtility {
     public sealed class MethodResult : MethodResultBase {
-        public MethodResult (bool isSuccess, ResultDetail? detail = null) : base (isSuccess, detail) { }
+        private MethodResult (bool isSuccess, ResultDetail? detail = null) : base (isSuccess, detail) { }
 
         public static MethodResult Ok () {
             return new MethodResult (true);
@@ -16,11 +16,11 @@ namespace FunctionalUtility.ResultUtility {
     }
 
     public sealed class MethodResult<T> : MethodResultBase {
-        public MethodResult (T item, ResultDetail? detail = null) : base (true, detail) {
+        private MethodResult (T item, ResultDetail? detail = null) : base (true, detail) {
             Value = item;
         }
 
-        public MethodResult (bool isSuccess, ResultDetail? detail = null) : base (isSuccess, detail) { }
+        private MethodResult (ResultDetail? detail = null) : base (false, detail) { }
 
         public T Value { get; }
 
@@ -33,7 +33,7 @@ namespace FunctionalUtility.ResultUtility {
         }
 
         public static MethodResult<T> Fail (ResultDetail detail) {
-            return new MethodResult<T> (false, detail);
+            return new MethodResult<T> (detail);
         }
     }
 }
