@@ -92,6 +92,21 @@ namespace FunctionalUtility.Extensions {
         ) => predicate (@this) ? function (@this).MapMethodResult (@this) : MethodResult<T>.Ok (@this);
 
         public static MethodResult OperateWhen (
+            Func<MethodResult> predicate,
+            Func<MethodResult> function
+        ) => predicate ().OnSuccess (function);
+
+        public static MethodResult<T> OperateWhen<T> (
+            Func<MethodResult> predicate,
+            Func<MethodResult<T>> function
+        ) => predicate ().OnSuccess (function);
+
+        public static MethodResult OperateWhen (
+            Func<MethodResult> predicate,
+            Action action
+        ) => predicate ().OnSuccess (action);
+
+        public static MethodResult OperateWhen (
             MethodResult predicate,
             Func<MethodResult> function
         ) => predicate.OnSuccess (function);
@@ -104,9 +119,27 @@ namespace FunctionalUtility.Extensions {
 
         public static MethodResult<T> OperateWhen<T> (
             this T @this,
+            Func<MethodResult> predicate,
+            Func<MethodResult> function
+        ) => predicate ().OnSuccess (function).MapMethodResult (@this);
+
+        public static MethodResult<T> OperateWhen<T> (
+            this T _,
+            Func<MethodResult> predicate,
+            Func<MethodResult<T>> function
+        ) => predicate ().OnSuccess (function);
+
+        public static MethodResult<T> OperateWhen<T> (
+            this T @this,
             Func<T, MethodResult> predicate,
             Func<MethodResult<T>> function
         ) => predicate (@this).OnSuccess (function);
+
+        public static MethodResult<T> OperateWhen<T> (
+            this T @this,
+            Func<MethodResult> predicate,
+            Func<T, MethodResult<T>> function
+        ) => predicate ().OnSuccess (() => function (@this));
 
         public static MethodResult<T> OperateWhen<T> (
             this T @this,
