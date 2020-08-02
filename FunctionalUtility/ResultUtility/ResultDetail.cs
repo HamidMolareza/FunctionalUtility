@@ -9,5 +9,8 @@ namespace FunctionalUtility.ResultUtility {
         public int StatusCode { get; }
         public string Title { get; }
         public string? Message { get; }
+
+        public virtual object GetViewModel () =>
+            new { StatusCode, Title, Message };
     }
 }

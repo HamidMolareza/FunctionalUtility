@@ -5,14 +5,14 @@ using Microsoft.AspNetCore.Mvc;
 namespace FunctionalUtility.Extensions {
     public class MethodResultObject : ObjectResult {
         public MethodResultObject (MethodResultBase methodResult):
-            base (methodResult.IsSuccess ? null : methodResult.Detail) {
+            base (methodResult.IsSuccess ? null : methodResult.Detail.GetViewModel ()) {
                 StatusCode = methodResult.Detail.StatusCode;
             }
     }
 
     public class MethodResultObject<T> : ObjectResult {
         public MethodResultObject (MethodResult<T> methodResult):
-            base (methodResult.IsSuccess ? (object) methodResult.Value! : methodResult.Detail) {
+            base (methodResult.IsSuccess ? methodResult.Value! : methodResult.Detail.GetViewModel ()) {
                 StatusCode = methodResult.Detail.StatusCode;
             }
     }
