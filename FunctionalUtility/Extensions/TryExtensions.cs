@@ -72,11 +72,10 @@ namespace FunctionalUtility.Extensions {
 
         public static async Task<MethodResult<T>> TryAsync<T> (
             Func<Task<T>> function,
-            int numOfTry
-        ) {
+            int numOfTry) {
             var counter = 0;
             while (true) {
-                
+
                 try {
                     return MethodResult<T>.Ok (await function ());
                 } catch (Exception e) {
@@ -84,17 +83,16 @@ namespace FunctionalUtility.Extensions {
                     if (counter >= numOfTry)
                         return MethodResult<T>.Fail (new ExceptionError (e));
                 }
-                
+
             }
         }
 
         public static async Task<MethodResult<T>> TryAsync<T> (
             Func<Task<MethodResult<T>>> function,
-            int numOfTry
-        ) {
+            int numOfTry) {
             var counter = 0;
             while (true) {
-                
+
                 try {
                     return await function ();
                 } catch (Exception e) {
@@ -102,17 +100,16 @@ namespace FunctionalUtility.Extensions {
                     if (counter >= numOfTry)
                         return MethodResult<T>.Fail (new ExceptionError (e));
                 }
-                
+
             }
         }
 
         public static async Task<MethodResult> TryAsync (
             Func<Task> function,
-            int numOfTry
-        ) {
+            int numOfTry) {
             var counter = 0;
             while (true) {
-                
+
                 try {
                     await function ();
                     return MethodResult.Ok ();
@@ -121,7 +118,7 @@ namespace FunctionalUtility.Extensions {
                     if (counter >= numOfTry)
                         return MethodResult.Fail (new ExceptionError (e));
                 }
-                
+
             }
         }
 
@@ -131,7 +128,7 @@ namespace FunctionalUtility.Extensions {
         ) {
             var counter = 0;
             while (true) {
-                
+
                 try {
                     return await function ();
                 } catch (Exception e) {
@@ -139,7 +136,7 @@ namespace FunctionalUtility.Extensions {
                     if (counter >= numOfTry)
                         return MethodResult.Fail (new ExceptionError (e));
                 }
-                
+
             }
         }
 
