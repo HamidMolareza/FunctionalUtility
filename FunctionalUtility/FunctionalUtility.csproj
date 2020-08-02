@@ -5,6 +5,7 @@
   <Version>1.0.2</Version>
   <PackageTags>Functional; Function; </PackageTags>
   <Authors>Hamid Molareza</Authors>
+  <RepositoryUrl>https://github.com/HamidMolareza/FunctionalUtility</RepositoryUrl>
   </PropertyGroup>
 
   <PropertyGroup>
