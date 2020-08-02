@@ -61,7 +61,8 @@ namespace FunctionalUtility.Extensions {
         }
 
         public static MethodResult OnFail (
-            this MethodResult @this, Action<MethodResult> fail) {
+            this MethodResult @this,
+            Action<MethodResult> fail) {
             if (!@this.IsSuccess)
                 fail (@this);
             return @this;
@@ -410,7 +411,117 @@ namespace FunctionalUtility.Extensions {
 
         #region OnFailAsync
 
+        public static async Task<MethodResult<TSource>> OnFailAsync<TSource> (
+            this Task<MethodResult<TSource>> @this,
+            Func<Task<MethodResult<TSource>>> onFailTask) {
+            var methodResult = await @this;
+            if (!methodResult.IsSuccess)
+                return await onFailTask ();
+
+            return methodResult;
+        }
+
         public static async Task<MethodResult<TSource>> OnFailAsync<TSource, TResult> (
+            this Task<MethodResult<TSource>> @this,
+            Func<MethodResult<TSource>, Task<MethodResult<TSource>>> onFailTask) {
+            var methodResult = await @this;
+            if (!methodResult.IsSuccess)
+                return await onFailTask (methodResult);
+
+            return methodResult;
+        }
+
+        public static async Task<MethodResult<TSource>> OnFailAsync<TSource> (
+            this Task<MethodResult<TSource>> @this,
+            Func<MethodResult<TSource>, MethodResult<TSource>> onFailTask) {
+            var methodResult = await @this;
+            if (!methodResult.IsSuccess)
+                return onFailTask (methodResult);
+
+            return methodResult;
+        }
+
+        public static async Task<MethodResult<TSource>> OnFailAsync<TSource> (
+            this Task<MethodResult<TSource>> @this,
+            Func<MethodResult<TSource>> onFailTask
+        ) {
+            var methodResult = await @this;
+            if (!methodResult.IsSuccess)
+                return onFailTask ();
+
+            return methodResult;
+        }
+
+        public static async Task<MethodResult> OnFailAsync (
+            this Task<MethodResult> @this,
+            Func<Task<MethodResult>> onFailTask
+        ) {
+            var methodResult = await @this;
+            return methodResult.IsSuccess ? methodResult : await onFailTask ();
+        }
+
+        public static async Task<MethodResult> OnFailAsync (
+            this Task<MethodResult> @this,
+            Func<MethodResult, Task<MethodResult>> onFailTask
+        ) {
+            var methodResult = await @this;
+            return methodResult.IsSuccess ? methodResult : await onFailTask (methodResult);
+        }
+
+        public static async Task<MethodResult> OnFailAsync (
+            this Task<MethodResult> @this,
+            Func<MethodResult, MethodResult> onFailTask
+        ) {
+            var methodResult = await @this;
+            return methodResult.IsSuccess ? methodResult : onFailTask (methodResult);
+        }
+
+        public static async Task<MethodResult> OnFailAsync (
+            this Task<MethodResult> @this,
+            Func<MethodResult> onFailTask
+        ) {
+            var methodResult = await @this;
+            return methodResult.IsSuccess ? methodResult : onFailTask ();
+        }
+
+        public static async Task<MethodResult> OnFailAsync (
+            this Task<MethodResult> @this,
+            Action onFailTask
+        ) {
+            var methodResult = await @this;
+            if (!methodResult.IsSuccess)
+                onFailTask ();
+
+            return methodResult;
+        }
+
+        public static async Task<MethodResult<T>> OnFailAsync<T> (
+            this Task<MethodResult<T>> @this,
+            Action onFailTask
+        ) {
+            var methodResult = await @this;
+            if (!methodResult.IsSuccess)
+                onFailTask ();
+
+            return methodResult;
+        }
+
+        public static async Task<MethodResult<T>> OnFailAsync<T> (
+            this Task<MethodResult<T>> @this,
+            Func<MethodResult<T>, Task<MethodResult<T>>> onFailTask
+        ) {
+            var methodResult = await @this;
+            if (!methodResult.IsSuccess)
+                return await onFailTask (methodResult);
+
+            return methodResult;
+        }
+
+        #endregion
+
+        #region TeeOnFailAsync
+
+        public static async Task<MethodResult<TSource>> TeeOnFailAsync<TSource, TResult> (
             this Task<MethodResult<TSource>> @this,
             Func<Task<MethodResult<TResult>>> onFailTask) {
             var methodResult = await @this;
@@ -420,7 +531,7 @@ namespace FunctionalUtility.Extensions {
             return methodResult;
         }
 
-        public static async Task<MethodResult<TSource>> OnFailAsync<TSource> (
+        public static async Task<MethodResult<TSource>> TeeOnFailAsync<TSource> (
             this Task<MethodResult<TSource>> @this,
             Func<Task<MethodResult>> onFailTask) {
             var methodResult = await @this;
@@ -430,7 +541,7 @@ namespace FunctionalUtility.Extensions {
             return methodResult;
         }
 
-        public static async Task<MethodResult<TSource>> OnFailAsync<TSource, TResult> (
+        public static async Task<MethodResult<TSource>> TeeOnFailAsync<TSource, TResult> (
             this Task<MethodResult<TSource>> @this,
             Func<MethodResult<TSource>, Task<MethodResult<TResult>>> onFailTask) {
             var methodResult = await @this;
@@ -440,7 +551,7 @@ namespace FunctionalUtility.Extensions {
             return methodResult;
         }
 
-        public static async Task<MethodResult<TSource>> OnFailAsync<TSource, TResult> (
+        public static async Task<MethodResult<TSource>> TeeOnFailAsync<TSource, TResult> (
             this Task<MethodResult<TSource>> @this,
             Func<MethodResult<TSource>, MethodResult<TResult>> onFailTask) {
             var methodResult = await @this;
@@ -450,7 +561,7 @@ namespace FunctionalUtility.Extensions {
             return methodResult;
         }
 
-        public static async Task<MethodResult<TSource>> OnFailAsync<TSource, TResult> (
+        public static async Task<MethodResult<TSource>> TeeOnFailAsync<TSource, TResult> (
             this Task<MethodResult<TSource>> @this,
             Func<MethodResult<TResult>> onFailTask
         ) {
@@ -461,15 +572,7 @@ namespace FunctionalUtility.Extensions {
             return methodResult;
         }
 
-        public static async Task<MethodResult> OnFailAsync (
-            this Task<MethodResult> @this,
-            Func<Task<MethodResult>> onFailTask
-        ) {
-            var methodResult = await @this;
-            return methodResult.IsSuccess ? MethodResult.Ok () : await onFailTask ();
-        }
-
-        public static async Task<MethodResult<TSource>> OnFailAsync<TSource> (
+        public static async Task<MethodResult<TSource>> TeeOnFailAsync<TSource> (
             this Task<MethodResult<TSource>> @this,
             Func<MethodResult> onFailTask
         ) {
@@ -480,53 +583,7 @@ namespace FunctionalUtility.Extensions {
             return methodResult;
         }
 
-        public static async Task<MethodResult> OnFailAsync (
-            this Task<MethodResult> @this,
-            Func<MethodResult, Task<MethodResult>> onFailTask
-        ) {
-            var methodResult = await @this;
-            return methodResult.IsSuccess ? MethodResult.Ok () : await onFailTask (methodResult);
-        }
-
-        public static async Task<MethodResult> OnFailAsync (
-            this Task<MethodResult> @this,
-            Func<MethodResult, MethodResult> onFailTask
-        ) {
-            var methodResult = await @this;
-            return methodResult.IsSuccess ? MethodResult.Ok () : onFailTask (methodResult);
-        }
-
-        public static async Task<MethodResult> OnFailAsync (
-            this Task<MethodResult> @this,
-            Func<MethodResult> onFailTask
-        ) {
-            var methodResult = await @this;
-            return methodResult.IsSuccess ? MethodResult.Ok () : onFailTask ();
-        }
-
-        public static async Task<MethodResult> OnFailAsync (
-            this Task<MethodResult> @this,
-            Action onFailTask
-        ) {
-            var methodResult = await @this;
-            if (!methodResult.IsSuccess)
-                onFailTask ();
-
-            return methodResult;
-        }
-
-        public static async Task<MethodResult<T>> OnFailAsync<T> (
-            this Task<MethodResult<T>> @this,
-            Action onFailTask
-        ) {
-            var methodResult = await @this;
-            if (!methodResult.IsSuccess)
-                onFailTask ();
-
-            return methodResult;
-        }
-
-        public static async Task<MethodResult<T>> OnFailAsync<T> (
+        public static async Task<MethodResult<T>> TeeOnFailAsync<T> (
             this Task<MethodResult<T>> @this,
             Func<Task> onFailTask
         ) {
@@ -537,7 +594,7 @@ namespace FunctionalUtility.Extensions {
             return methodResult;
         }
 
-        public static async Task<MethodResult<T>> OnFailAsync<T> (
+        public static async Task<MethodResult<T>> TeeOnFailAsync<T> (
             this Task<MethodResult<T>> @this,
             Func<MethodResult<T>, Task> onFailTask
         ) {
