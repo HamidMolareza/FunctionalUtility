@@ -12,11 +12,12 @@ namespace FunctionalUtility.Extensions {
 
         public static MethodResult IsNotNullOrEmpty (
                 this IEnumerable? @this,
-                ErrorDetail? errorDetail = null) =>
+                ErrorDetail? errorDetail = null,
+                bool showDefaultMessageToUser = true) =>
             @this.FailWhen (() => @this.IsNullOrEmpty (),
                 errorDetail ?? new ErrorDetail (StatusCodes.Status400BadRequest,
                     title: "IsNullOrEmptyError",
-                    message: "object is not null or empty."))
+                    message: "object is not null or empty.", showDefaultMessageToUser : showDefaultMessageToUser))
             .MapMethodResult ();
 
     }

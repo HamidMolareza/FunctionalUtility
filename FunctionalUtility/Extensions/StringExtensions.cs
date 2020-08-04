@@ -8,10 +8,12 @@ namespace FunctionalUtility.Extensions {
 
         public static MethodResult<string> MustMatchRegex (
                 this string @this, Regex rgx,
-                ErrorDetail? errorDetail = null) =>
+                ErrorDetail? errorDetail = null,
+                bool showDefaultMessageToUser = true) =>
             @this.FailWhen (!rgx.IsMatch (@this),
                 errorDetail ??
                 new ErrorDetail (StatusCodes.Status400BadRequest,
-                    message: $"({@this}) is not match with {rgx}"));
+                    message: $"({@this}) is not match with {rgx}",
+                    showDefaultMessageToUser : showDefaultMessageToUser));
     }
 }
