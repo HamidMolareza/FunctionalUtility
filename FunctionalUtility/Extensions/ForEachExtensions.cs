@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using FunctionalUtility.ResultDetails;
 using FunctionalUtility.ResultUtility;
@@ -73,11 +74,12 @@ namespace FunctionalUtility.Extensions {
         #region SelectResults
 
         public static MethodResult<List<TResult>> SelectResults<TSource, TResult> (
-            this List<TSource> @this,
-            Func<TSource, MethodResult<TResult>> function) {
-
-            var selectedResult = new List<TResult> (@this.Count);
-            foreach (var item in @this) {
+            this IEnumerable<TSource> @this,
+            Func<TSource, MethodResult<TResult>> function)
+        {
+            var thisList = @this.ToList();
+            var selectedResult = new List<TResult> (thisList.Count);
+            foreach (var item in thisList) {
                 var result = function (item);
                 if (!result.IsSuccess)
                     return MethodResult<List<TResult>>.Fail (result.Detail);
@@ -88,11 +90,12 @@ namespace FunctionalUtility.Extensions {
         }
         
         public static MethodResult<List<TResult>> SelectResults<TSource, TResult> (
-            this List<TSource> @this,
+            this IEnumerable<TSource> @this,
             Func<TSource, TResult> function) {
-
-            var selectedResult = new List<TResult> (@this.Count);
-            foreach (var item in @this) {
+            var thisList = @this.ToList();
+            
+            var selectedResult = new List<TResult> (thisList.Count);
+            foreach (var item in thisList) {
                 try
                 {
                     var result = function (item);
@@ -112,12 +115,12 @@ namespace FunctionalUtility.Extensions {
         #region SelectResultsAsync
 
         public static async Task<MethodResult<List<TResult>>> SelectResultsAsync<TSource, TResult> (
-            this Task<List<TSource>> @this,
+            this Task<IEnumerable<TSource>> @this,
             Func<TSource, MethodResult<TResult>> function)
         {
-            var list = await @this;
-            var selectedResult = new List<TResult> (list.Count);
-            foreach (var item in list) {
+            var thisList = (await @this).ToList();
+            var selectedResult = new List<TResult> (thisList.Count);
+            foreach (var item in thisList) {
                 var result = function (item);
                 if (!result.IsSuccess)
                     return MethodResult<List<TResult>>.Fail (result.Detail);
@@ -128,11 +131,12 @@ namespace FunctionalUtility.Extensions {
         }
         
         public static async Task<MethodResult<List<TResult>>> SelectResultsAsync<TSource, TResult> (
-            this List<TSource> @this,
+            this IEnumerable<TSource> @this,
             Func<TSource, Task<MethodResult<TResult>>> function) {
-
-            var selectedResult = new List<TResult> (@this.Count);
-            foreach (var item in @this) {
+            var thisList = @this.ToList();
+            
+            var selectedResult = new List<TResult> (thisList.Count);
+            foreach (var item in thisList) {
                 var result = await function (item);
                 if (!result.IsSuccess)
                     return MethodResult<List<TResult>>.Fail (result.Detail);
@@ -143,12 +147,13 @@ namespace FunctionalUtility.Extensions {
         }
         
         public static async Task<MethodResult<List<TResult>>> SelectResultsAsync<TSource, TResult> (
-            this Task<List<TSource>> @this,
+            this Task<IEnumerable<TSource>> @this,
             Func<TSource, Task<MethodResult<TResult>>> function)
         {
-            var list = await @this;
-            var selectedResult = new List<TResult> (list.Count);
-            foreach (var item in list) {
+            var thisList = (await @this).ToList();
+            
+            var selectedResult = new List<TResult> (thisList.Count);
+            foreach (var item in thisList) {
                 var result = await function (item);
                 if (!result.IsSuccess)
                     return MethodResult<List<TResult>>.Fail (result.Detail);
@@ -159,12 +164,13 @@ namespace FunctionalUtility.Extensions {
         }
 
         public static async Task<MethodResult<List<TResult>>> SelectResultsAsync<TSource, TResult> (
-            this Task<List<TSource>> @this,
+            this Task<IEnumerable<TSource>> @this,
             Func<TSource, TResult> function)
         {
-            var list = await @this;
-            var selectedResult = new List<TResult> (list.Count);
-            foreach (var item in list) {
+            var thisList = ( await @this).ToList();
+            
+            var selectedResult = new List<TResult> (thisList.Count);
+            foreach (var item in thisList) {
                 try
                 {
                     var result = function (item);
@@ -180,11 +186,12 @@ namespace FunctionalUtility.Extensions {
         }
         
         public static async Task<MethodResult<List<TResult>>> SelectResultsAsync<TSource, TResult> (
-            this List<TSource> @this,
+            this IEnumerable<TSource> @this,
             Func<TSource, Task<TResult>> function) {
-
-            var selectedResult = new List<TResult> (@this.Count);
-            foreach (var item in @this) {
+            var thisList = @this.ToList();
+            
+            var selectedResult = new List<TResult> (thisList.Count);
+            foreach (var item in thisList) {
                 try
                 {
                     var result = await function (item);
@@ -200,12 +207,13 @@ namespace FunctionalUtility.Extensions {
         }
         
         public static async Task<MethodResult<List<TResult>>> SelectResultsAsync<TSource, TResult> (
-            this Task<List<TSource>> @this,
+            this Task<IEnumerable<TSource>> @this,
             Func<TSource, Task<TResult>> function)
         {
-            var list = await @this;
-            var selectedResult = new List<TResult> (list.Count);
-            foreach (var item in list) {
+            var thisList = (await @this).ToList();
+            
+            var selectedResult = new List<TResult> (thisList.Count);
+            foreach (var item in thisList) {
                 try
                 {
                     var result = await function (item);
