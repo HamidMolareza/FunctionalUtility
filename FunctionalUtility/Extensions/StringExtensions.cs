@@ -12,6 +12,6 @@ namespace FunctionalUtility.Extensions {
             @this.FailWhen (!rgx.IsMatch (@this),
                 errorDetail ??
                 new ErrorDetail (StatusCodes.Status400BadRequest,
-                    message: $"Input is not match with {rgx}"));
+                    message: $"({@this}) is not match with {rgx}"));
     }
 }

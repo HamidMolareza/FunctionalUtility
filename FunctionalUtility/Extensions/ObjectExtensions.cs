@@ -10,7 +10,7 @@ namespace FunctionalUtility.Extensions {
                 this object? @this,
                 ErrorDetail? errorDetail = null) =>
             @this.FailWhen (@this is null, errorDetail ?? new ErrorDetail (
-                StatusCodes.Status400BadRequest, message: "Object is null."))
+                StatusCodes.Status400BadRequest, title: "NullError", message: "Object is null."))
             .MapMethodResult ((T) @this!);
 
         public static MethodResult<TResult> As<TResult> (
@@ -21,13 +21,13 @@ namespace FunctionalUtility.Extensions {
             .OnFail (() =>
                 MethodResult<TResult>.Fail (errorDetail ??
                     new ErrorDetail (StatusCodes.Status400BadRequest,
-                        message: $"Object is not {typeof(TResult)}")));
+                        message: $"({@this} - Type of ({@this.GetType()})) is not {typeof(TResult)}")));
 
         public static MethodResult AreNull (
                 this IEnumerable<object?> @this) =>
             @this.ForEachUntilIsSuccess (obj =>
-                FailExtensions.FailWhen (obj is null, new ErrorDetail (
-                    StatusCodes.Status400BadRequest))
+                FailExtensions.FailWhen (obj != null, new ErrorDetail (
+                    StatusCodes.Status400BadRequest, message: $"{obj} is not null."))
             );
     }
 }

@@ -3,12 +3,12 @@ namespace FunctionalUtility.ResultUtility {
         public ResultDetail (int statusCode, string title, string? message = null) {
             StatusCode = statusCode;
             Title = title;
-            Message = message;
+            Message = message ?? "No data.";
         }
 
         public int StatusCode { get; }
         public string Title { get; }
-        public string? Message { get; }
+        public string Message { get; }
 
         public virtual object GetViewModel () =>
             new { StatusCode, Title, Message };
