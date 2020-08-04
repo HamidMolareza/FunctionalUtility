@@ -11,7 +11,7 @@ namespace FunctionalUtility.ResultDetails {
             ShowDefaultMessageToUser = showDefaultMessageToUser;
         }
 
-        private bool ShowDefaultMessageToUser { get; }
+        protected bool ShowDefaultMessageToUser { get; }
 
         public StackTrace StackTrace { get; } = new StackTrace (1, true);
         public Exception? Exception { get; }
