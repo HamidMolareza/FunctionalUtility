@@ -14,7 +14,7 @@ namespace FunctionalUtility.Extensions {
                 IServiceCollection services) where T : class =>
             @this
             .GetConfig<T> ()
-            .TryTee (obj => services.AddSingleton (obj))
+            .TryTee (services.AddSingleton!)
             .MapMethodResult (@this);
 
         public static MethodResult<IConfiguration> AddConfig<T> (

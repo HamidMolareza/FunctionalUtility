@@ -14,7 +14,7 @@ namespace FunctionalUtility.Extensions {
                 this IEnumerable? @this,
                 ErrorDetail? errorDetail = null,
                 bool showDefaultMessageToUser = true) =>
-            @this.FailWhen (() => @this.IsNullOrEmpty (),
+            @this.FailWhen (@this.IsNullOrEmpty,
                 errorDetail ?? new ErrorDetail (StatusCodes.Status400BadRequest,
                     title: "IsNullOrEmptyError",
                     message: "object is not null or empty.", showDefaultMessageToUser : showDefaultMessageToUser))
