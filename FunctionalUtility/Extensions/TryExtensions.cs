@@ -146,23 +146,61 @@ namespace FunctionalUtility.Extensions {
             int numOfTry
         ) => TryAsync (() => function (@this), numOfTry);
 
+        public static async Task<MethodResult<TResult>> TryAsync<TSource, TResult>(
+            this Task<TSource> @this,
+            Func<TSource, Task<TResult>> function,
+            int numOfTry
+        )
+        {
+            var t = await @this;
+          return await TryAsync(() => function(t), numOfTry);
+        }
+
         public static Task<MethodResult<TResult>> TryAsync<TSource, TResult> (
             this TSource @this,
             Func<TSource, Task<MethodResult<TResult>>> function,
             int numOfTry
         ) => TryAsync (() => function (@this), numOfTry);
 
+        public static async Task<MethodResult<TResult>> TryAsync<TSource, TResult>(
+            this Task<TSource> @this,
+            Func<TSource, Task<MethodResult<TResult>>> function,
+            int numOfTry
+        )
+        {
+            var t = await @this;
+            return await TryAsync(() => function(t), numOfTry);
+        }
+
         public static Task<MethodResult> TryAsync<TSource> (
             this TSource @this,
             Func<TSource, Task> function,
             int numOfTry
         ) => TryAsync (() => function (@this), numOfTry);
+        
+        public static async Task<MethodResult> TryAsync<TSource> (
+            this Task<TSource> @this,
+            Func<TSource, Task> function,
+            int numOfTry
+        ) {
+            var t = await @this;
+            return await TryAsync(() => function(t), numOfTry);
+        }
 
         public static Task<MethodResult> TryAsync<TSource> (
             this TSource @this,
             Func<TSource, Task<MethodResult>> function,
             int numOfTry
         ) => TryAsync (() => function (@this), numOfTry);
+        
+        public static async Task<MethodResult> TryAsync<TSource> (
+            this Task<TSource> @this,
+            Func<TSource, Task<MethodResult>> function,
+            int numOfTry
+        ) {
+            var t = await @this;
+            return await TryAsync(() => function(t), numOfTry);
+        }
 
         #endregion
 
