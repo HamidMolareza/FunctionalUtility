@@ -327,13 +327,40 @@ namespace FunctionalUtility.Extensions {
                 await function ();
         }
 
+        public static async Task<MethodResult> OperateWhenAsync (
+            Func<bool> predicate,
+            Func<Task<MethodResult>> function) {
+            if (predicate ())
+                return await function ();
+            return MethodResult.Ok ();
+        }
+
         public static async Task<T> OperateWhenAsync<T> (
             this Task<T> @this,
             bool predicate,
             Func<Task<T>> function) {
+            var t = await @this;
             if (predicate)
                 return await function ();
-            return await @this;
+            return t;
+        }
+
+        public static async Task<MethodResult<T>> OperateWhenAsync<T> (
+            this Task<MethodResult<T>> @this,
+            bool predicate,
+            Func<Task<T>> function) {
+            var t = await @this;
+            return predicate ? MethodResult<T>.Ok (await function ()) : t;
+        }
+
+        public static async Task<MethodResult<T>> OperateWhenAsync<T> (
+            this Task<T> @this,
+            bool predicate,
+            Func<Task<MethodResult<T>>> function) {
+            var t = await @this;
+            if (predicate)
+                return await function ();
+            return MethodResult<T>.Ok (t);
         }
 
         public static async Task<T> OperateWhenAsync<T> (
@@ -344,6 +371,16 @@ namespace FunctionalUtility.Extensions {
             if (predicate)
                 return await function (t);
             return t;
+        }
+
+        public static async Task<MethodResult<T>> OperateWhenAsync<T> (
+            this Task<T> @this,
+            bool predicate,
+            Func<T, Task<MethodResult<T>>> function) {
+            var t = await @this;
+            if (predicate)
+                return await function (t);
+            return MethodResult<T>.Ok (t);
         }
 
         public static async Task<T> OperateWhenAsync<T> (
@@ -356,6 +393,16 @@ namespace FunctionalUtility.Extensions {
             return t;
         }
 
+        public static async Task<MethodResult<T>> OperateWhenAsync<T> (
+            this Task<T> @this,
+            Func<bool> predicate,
+            Func<T, Task<MethodResult<T>>> function) {
+            var t = await @this;
+            if (predicate ())
+                return await function (t);
+            return MethodResult<T>.Ok (t);
+        }
+
         public static async Task<T> OperateWhenAsync<T> (
             this Task<T> @this,
             Func<T, bool> predicate,
@@ -364,6 +411,16 @@ namespace FunctionalUtility.Extensions {
             if (predicate (t))
                 return await function (t);
             return t;
+        }
+
+        public static async Task<MethodResult<T>> OperateWhenAsync<T> (
+            this Task<T> @this,
+            Func<T, bool> predicate,
+            Func<T, Task<MethodResult<T>>> function) {
+            var t = await @this;
+            if (predicate (t))
+                return await function (t);
+            return MethodResult<T>.Ok (t);
         }
 
         public static async Task<T> OperateWhenAsync<T> (
@@ -374,12 +431,28 @@ namespace FunctionalUtility.Extensions {
             return predicate ? function (t) : t;
         }
 
+        public static async Task<MethodResult<T>> OperateWhenAsync<T> (
+            this Task<T> @this,
+            bool predicate,
+            Func<T, MethodResult<T>> function) {
+            var t = await @this;
+            return predicate ? function (t) : MethodResult<T>.Ok (t);
+        }
+
         public static async Task<T> OperateWhenAsync<T> (
             this Task<T> @this,
             Func<bool> predicate,
             Func<T, T> function) {
             var t = await @this;
             return predicate () ? function (t) : t;
+        }
+
+        public static async Task<MethodResult<T>> OperateWhenAsync<T> (
+            this Task<T> @this,
+            Func<bool> predicate,
+            Func<T, MethodResult<T>> function) {
+            var t = await @this;
+            return predicate () ? function (t) : MethodResult<T>.Ok (t);
         }
 
         public static async Task<T> OperateWhenAsync<T> (
@@ -390,13 +463,40 @@ namespace FunctionalUtility.Extensions {
             return predicate (t) ? function (t) : t;
         }
 
+        public static async Task<MethodResult<T>> OperateWhenAsync<T> (
+            this Task<T> @this,
+            Func<T, bool> predicate,
+            Func<T, MethodResult<T>> function) {
+            var t = await @this;
+            return predicate (t) ? function (t) : MethodResult<T>.Ok (t);
+        }
+
         public static async Task<T> OperateWhenAsync<T> (
             this Task<T> @this,
             Func<bool> predicate,
             Func<Task<T>> function) {
+            var t = await @this;
             if (predicate ())
                 return await function ();
-            return await @this;
+            return t;
+        }
+
+        public static async Task<MethodResult<T>> OperateWhenAsync<T> (
+            this Task<MethodResult<T>> @this,
+            Func<bool> predicate,
+            Func<Task<T>> function) {
+            var t = await @this;
+            return predicate () ? MethodResult<T>.Ok (await function ()) : t;
+        }
+
+        public static async Task<MethodResult<T>> OperateWhenAsync<T> (
+            this Task<T> @this,
+            Func<bool> predicate,
+            Func<Task<MethodResult<T>>> function) {
+            var t = await @this;
+            if (predicate ())
+                return await function ();
+            return MethodResult<T>.Ok (t);
         }
 
         public static async Task<T> OperateWhenAsync<T> (
@@ -409,10 +509,44 @@ namespace FunctionalUtility.Extensions {
             return t;
         }
 
+        public static async Task<MethodResult<T>> OperateWhenAsync<T> (
+            this Task<T> @this,
+            Func<T, bool> predicate,
+            Func<Task<MethodResult<T>>> function) {
+            var t = await @this;
+            if (predicate (t))
+                return await function ();
+            return MethodResult<T>.Ok (t);
+        }
+
         public static async Task<T> OperateWhenAsync<T> (
             this T @this,
             bool predicate,
             Func<Task<T>> function) {
+            if (predicate)
+                return await function ();
+            return @this;
+        }
+
+        public static async Task<MethodResult<T>> OperateWhenAsync<T> (
+                this MethodResult<T> @this,
+                bool predicate,
+                Func<Task<T>> function) =>
+            predicate ? MethodResult<T>.Ok (await function ()) : @this;
+
+        public static async Task<MethodResult<T>> OperateWhenAsync<T> (
+            this T @this,
+            bool predicate,
+            Func<Task<MethodResult<T>>> function) {
+            if (predicate)
+                return await function ();
+            return MethodResult<T>.Ok (@this);
+        }
+
+        public static async Task<MethodResult<T>> OperateWhenAsync<T> (
+            this MethodResult<T> @this,
+            bool predicate,
+            Func<Task<MethodResult<T>>> function) {
             if (predicate)
                 return await function ();
             return @this;
@@ -427,40 +561,38 @@ namespace FunctionalUtility.Extensions {
             return @this;
         }
 
-        public static async Task<T> TeeOperateWhenAsync<T> (
-            this T @this,
-            bool predicate,
-            Func<Task> function) {
-            if (predicate)
-                await function ();
-            return @this;
-        }
+        public static async Task<MethodResult<T>> OperateWhenAsync<T> (
+                this MethodResult<T> @this,
+                Func<bool> predicate,
+                Func<Task<T>> function) =>
+            predicate () ? MethodResult<T>.Ok (await function ()) : @this;
 
-        public static async Task<T> TeeOperateWhenAsync<T> (
+        public static async Task<MethodResult<T>> OperateWhenAsync<T> (
             this T @this,
             Func<bool> predicate,
-            Func<Task> function) {
+            Func<Task<MethodResult<T>>> function) {
             if (predicate ())
-                await function ();
-            return @this;
+                return await function ();
+            return MethodResult<T>.Ok (@this);
         }
 
-        public static async Task<T> OperateWhenAsync<T> (
-            this T @this,
-            bool predicate,
-            Func<Task> function) {
-            if (predicate)
-                await function ();
-            return @this;
-        }
-
-        public static async Task<T> OperateWhenAsync<T> (
-            this T @this,
+        public static async Task<MethodResult<T>> OperateWhenAsync<T> (
+            this MethodResult<T> @this,
             Func<bool> predicate,
-            Func<Task> function) {
+            Func<Task<MethodResult<T>>> function) {
             if (predicate ())
-                await function ();
+                return await function ();
             return @this;
+        }
+
+        public static async Task<MethodResult<T>> OperateWhenAsync<T> (
+            this Task<MethodResult<T>> @this,
+            bool predicate,
+            Func<Task<MethodResult<T>>> function) {
+            var t = await @this;
+            if (predicate)
+                return await function ();
+            return t;
         }
 
         public static async Task<T> OperateWhenAsync<T> (
@@ -472,13 +604,13 @@ namespace FunctionalUtility.Extensions {
             return @this;
         }
 
-        public static async Task<T> OperateWhenAsync<T> (
+        public static async Task<MethodResult<T>> OperateWhenAsync<T> (
             this T @this,
             Func<T, bool> predicate,
-            Func<Task> function) {
+            Func<Task<MethodResult<T>>> function) {
             if (predicate (@this))
-                await function ();
-            return @this;
+                return await function ();
+            return MethodResult<T>.Ok (@this);
         }
 
         public static async Task<T> OperateWhenAsync<T> (
@@ -490,31 +622,31 @@ namespace FunctionalUtility.Extensions {
             return @this;
         }
 
-        public static async Task<T> OperateWhenAsync<T> (
-            this T @this,
-            Func<bool> predicate,
-            Func<T, Task<T>> function) {
-            if (predicate ())
-                return await function (@this);
-            return @this;
-        }
-
-        public static async Task<T> OperateWhenAsync<T> (
+        public static async Task<MethodResult<T>> OperateWhenAsync<T> (
             this T @this,
             bool predicate,
-            Func<T, Task> function) {
+            Func<T, Task<MethodResult<T>>> function) {
             if (predicate)
-                await function (@this);
-            return @this;
+                return await function (@this);
+            return MethodResult<T>.Ok (@this);
         }
 
         public static async Task<T> OperateWhenAsync<T> (
             this T @this,
             Func<bool> predicate,
-            Func<T, Task> function) {
+            Func<T, Task<T>> function) {
             if (predicate ())
-                await function (@this);
+                return await function (@this);
             return @this;
+        }
+
+        public static async Task<MethodResult<T>> OperateWhenAsync<T> (
+            this T @this,
+            Func<bool> predicate,
+            Func<T, Task<MethodResult<T>>> function) {
+            if (predicate ())
+                return await function (@this);
+            return MethodResult<T>.Ok (@this);
         }
 
         public static async Task<T> OperateWhenAsync<T> (
@@ -526,13 +658,13 @@ namespace FunctionalUtility.Extensions {
             return @this;
         }
 
-        public static async Task<T> OperateWhenAsync<T> (
+        public static async Task<MethodResult<T>> OperateWhenAsync<T> (
             this T @this,
             Func<T, bool> predicate,
-            Func<T, Task> function) {
+            Func<T, Task<MethodResult<T>>> function) {
             if (predicate (@this))
-                await function (@this);
-            return @this;
+                return await function (@this);
+            return MethodResult<T>.Ok (@this);
         }
 
         public static async Task<T> OperateWhenAsync<T> (
@@ -542,6 +674,15 @@ namespace FunctionalUtility.Extensions {
             if (predicate (@this).IsSuccess)
                 return await function ();
             return @this;
+        }
+
+        public static async Task<MethodResult<T>> OperateWhenAsync<T> (
+            this T @this,
+            Func<T, MethodResult> predicate,
+            Func<Task<MethodResult<T>>> function) {
+            if (predicate (@this).IsSuccess)
+                return await function ();
+            return MethodResult<T>.Ok (@this);
         }
 
         #endregion
@@ -610,6 +751,123 @@ namespace FunctionalUtility.Extensions {
             Func<T, MethodResult> predicate,
             Action<T> action
         ) => predicate (@this).OnSuccess (() => action (@this)).Map (@this);
+
+        public static async Task<T> TeeOperateWhenAsync<T> (
+            this T @this,
+            bool predicate,
+            Func<Task> function) {
+            if (predicate)
+                await function ();
+            return @this;
+        }
+
+        public static async Task<MethodResult<T>> TeeOperateWhenAsync<T> (
+            this MethodResult<T> @this,
+            bool predicate,
+            Func<Task> function) {
+            if (predicate)
+                await function ();
+            return @this;
+        }
+
+        public static async Task<MethodResult<TSource>> TeeOperateWhenAsync<TSource, TResult> (
+            this TSource @this,
+            bool predicate,
+            Func<Task<TResult>> function) {
+            if (predicate)
+                await function ();
+            return MethodResult<TSource>.Ok (@this);
+        }
+
+        public static async Task<MethodResult<TSource>> TeeOperateWhenAsync<TSource, TResult> (
+            this MethodResult<TSource> @this,
+            bool predicate,
+            Func<Task<TResult>> function) {
+            if (predicate)
+                await function ();
+            return @this;
+        }
+
+        public static async Task<T> TeeOperateWhenAsync<T> (
+            this T @this,
+            Func<bool> predicate,
+            Func<Task> function) {
+            if (predicate ())
+                await function ();
+            return @this;
+        }
+
+        public static async Task<MethodResult<T>> TeeOperateWhenAsync<T> (
+            this MethodResult<T> @this,
+            Func<bool> predicate,
+            Func<Task> function) {
+            if (predicate ())
+                await function ();
+            return @this;
+        }
+
+        public static async Task<MethodResult<TSource>> TeeOperateWhenAsync<TSource, TResult> (
+            this TSource @this,
+            Func<bool> predicate,
+            Func<Task<TResult>> function) {
+            if (predicate ())
+                await function ();
+            return MethodResult<TSource>.Ok (@this);
+        }
+
+        public static async Task<MethodResult<TSource>> TeeOperateWhenAsync<TSource, TResult> (
+            this MethodResult<TSource> @this,
+            Func<bool> predicate,
+            Func<Task<TResult>> function) {
+            if (predicate ())
+                await function ();
+            return @this;
+        }
+
+        public static async Task<T> TeeOperateWhenAsync<T> (
+            this T @this,
+            Func<T, bool> predicate,
+            Func<Task> function) {
+            if (predicate (@this))
+                await function ();
+            return @this;
+        }
+
+        public static async Task<MethodResult<TSource>> TeeOperateWhenAsync<TSource, TResult> (
+            this TSource @this,
+            Func<TSource, bool> predicate,
+            Func<Task<TResult>> function) {
+            if (predicate (@this))
+                await function ();
+            return MethodResult<TSource>.Ok (@this);
+        }
+
+        public static async Task<T> TeeOperateWhenAsync<T> (
+            this T @this,
+            bool predicate,
+            Func<T, Task> function) {
+            if (predicate)
+                await function (@this);
+            return @this;
+        }
+
+        public static async Task<T> TeeOperateWhenAsync<T> (
+            this T @this,
+            Func<bool> predicate,
+            Func<T, Task> function) {
+            if (predicate ())
+                await function (@this);
+            return @this;
+        }
+
+        public static async Task<MethodResult<TSource>> TeeOperateWhenAsync<TSource, TResult> (
+            this TSource @this,
+            Func<bool> predicate,
+            Func<TSource, Task<TResult>> function) {
+            if (predicate ())
+                await function (@this);
+            return MethodResult<TSource>.Ok (@this);
+        }
 
         #endregion
 
