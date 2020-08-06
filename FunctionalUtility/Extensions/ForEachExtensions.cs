@@ -25,12 +25,13 @@ namespace FunctionalUtility.Extensions {
         public static MethodResult ForEachUntilIsSuccess<T> (
             this IEnumerable<T> @this,
             Action<T> action) {
-            foreach (var item in @this) {
+            var list = @this.ToList ();
+            foreach (var item in list) {
                 try {
                     action (item);
                 } catch (Exception e) {
                     return MethodResult.Fail (new ExceptionError (e,
-                        moreDetails : new { thisObj = @this, targetItem = item }));
+                        moreDetails : new { thisObj = list, targetItem = item }));
                 }
             }
             return MethodResult.Ok ();
@@ -54,12 +55,13 @@ namespace FunctionalUtility.Extensions {
         public static async Task<MethodResult> ForEachUntilIsSuccessAsync<T> (
             this IEnumerable<T> @this,
             Func<T, Task> action) {
-            foreach (var item in @this) {
+            var list = @this.ToList ();
+            foreach (var item in list) {
                 try {
                     await action (item);
                 } catch (Exception e) {
                     return MethodResult.Fail (new ExceptionError (e,
-                        moreDetails : new { thisObj = @this, targetItem = item }));
+                        moreDetails : new { thisObj = list, targetItem = item }));
                 }
             }
             return MethodResult.Ok ();
@@ -78,7 +80,7 @@ namespace FunctionalUtility.Extensions {
             foreach (var item in thisList) {
                 var result = function (item);
                 if (!result.IsSuccess) {
-                    result.Detail.AddDetail (new { thisObj = @this, targetItem = item });
+                    result.Detail.AddDetail (new { thisObj = thisList, targetItem = item });
                     return MethodResult<List<TResult>>.Fail (result.Detail);
                 }
                 selectedResult.Add (result.Value);
@@ -136,7 +138,7 @@ namespace FunctionalUtility.Extensions {
             foreach (var item in thisList) {
                 var result = await function (item);
                 if (!result.IsSuccess) {
-                    result.Detail.AddDetail (new { thisObj = @this, targetItem = item });
+                    result.Detail.AddDetail (new { thisObj = thisList, targetItem = item });
                     return MethodResult<List<TResult>>.Fail (result.Detail);
                 }
                 selectedResult.Add (result.Value);

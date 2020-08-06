@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using FunctionalUtility.ResultDetails;
 using FunctionalUtility.ResultUtility;
 using Microsoft.AspNetCore.Http;
@@ -11,15 +12,16 @@ namespace FunctionalUtility.Extensions {
             @this is null || !@this.GetEnumerator ().MoveNext ();
 
         public static MethodResult IsNotNullOrEmpty (
-                this IEnumerable? @this,
-                ErrorDetail? errorDetail = null,
-                bool showDefaultMessageToUser = true) =>
-            @this.FailWhen (@this.IsNullOrEmpty,
-                errorDetail ?? new ErrorDetail (StatusCodes.Status400BadRequest,
-                    title: "IsNullOrEmptyError",
-                    message: "object is not null or empty.",
-                    showDefaultMessageToUser : showDefaultMessageToUser))
-            .MapMethodResult ();
-
+            this IEnumerable? @this,
+            ErrorDetail? errorDetail = null,
+            bool showDefaultMessageToUser = true) {
+            var error = errorDetail ?? new ErrorDetail (StatusCodes.Status400BadRequest,
+                title: "IsNullOrEmptyError",
+                message: "object is not null or empty.",
+                showDefaultMessageToUser : showDefaultMessageToUser);
+            if (@this is null || @this.IsNullOrEmpty ())
+                return MethodResult.Fail (error);
+            return MethodResult.Ok ();
+        }
     }
 }
