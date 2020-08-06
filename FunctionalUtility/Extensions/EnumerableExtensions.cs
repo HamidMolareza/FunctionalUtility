@@ -17,7 +17,8 @@ namespace FunctionalUtility.Extensions {
             @this.FailWhen (@this.IsNullOrEmpty,
                 errorDetail ?? new ErrorDetail (StatusCodes.Status400BadRequest,
                     title: "IsNullOrEmptyError",
-                    message: "object is not null or empty.", showDefaultMessageToUser : showDefaultMessageToUser))
+                    message: "object is not null or empty.",
+                    showDefaultMessageToUser : showDefaultMessageToUser))
             .MapMethodResult ();
 
     }

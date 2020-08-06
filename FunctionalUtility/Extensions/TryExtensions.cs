@@ -23,7 +23,8 @@ namespace FunctionalUtility.Extensions {
             try {
                 return MethodResult<TResult>.Ok (function (@this));
             } catch (Exception e) {
-                return MethodResult<TResult>.Fail (new ExceptionError (e, message : e.Message));
+                return MethodResult<TResult>.Fail (new ExceptionError (e,
+                    moreDetails : new { thisSource = @this }));
             }
         }
 
@@ -42,7 +43,8 @@ namespace FunctionalUtility.Extensions {
             try {
                 return function (@this);
             } catch (Exception e) {
-                return MethodResult<TResult>.Fail (new ExceptionError (e, message : e.Message));
+                return MethodResult<TResult>.Fail (new ExceptionError (e,
+                    moreDetails : new { thisSource = @this }));
             }
         }
 
@@ -62,7 +64,8 @@ namespace FunctionalUtility.Extensions {
                 action (@this);
                 return MethodResult.Ok ();
             } catch (Exception e) {
-                return MethodResult.Fail (new ExceptionError (e, message : e.Message));
+                return MethodResult.Fail (new ExceptionError (e,
+                    moreDetails : new { thisSource = @this }));
             }
         }
 
@@ -81,7 +84,8 @@ namespace FunctionalUtility.Extensions {
                 } catch (Exception e) {
                     counter++;
                     if (counter >= numOfTry)
-                        return MethodResult<T>.Fail (new ExceptionError (e));
+                        return MethodResult<T>.Fail (new ExceptionError (e,
+                            moreDetails : new { numOfTry }));
                 }
 
             }
@@ -98,7 +102,8 @@ namespace FunctionalUtility.Extensions {
                 } catch (Exception e) {
                     counter++;
                     if (counter >= numOfTry)
-                        return MethodResult<T>.Fail (new ExceptionError (e));
+                        return MethodResult<T>.Fail (new ExceptionError (e,
+                            moreDetails : new { numOfTry }));
                 }
 
             }
@@ -116,7 +121,8 @@ namespace FunctionalUtility.Extensions {
                 } catch (Exception e) {
                     counter++;
                     if (counter >= numOfTry)
-                        return MethodResult.Fail (new ExceptionError (e));
+                        return MethodResult.Fail (new ExceptionError (e,
+                            moreDetails : new { numOfTry }));
                 }
 
             }
@@ -134,7 +140,8 @@ namespace FunctionalUtility.Extensions {
                 } catch (Exception e) {
                     counter++;
                     if (counter >= numOfTry)
-                        return MethodResult.Fail (new ExceptionError (e));
+                        return MethodResult.Fail (new ExceptionError (e,
+                            moreDetails : new { numOfTry }));
                 }
 
             }
@@ -146,14 +153,13 @@ namespace FunctionalUtility.Extensions {
             int numOfTry
         ) => TryAsync (() => function (@this), numOfTry);
 
-        public static async Task<MethodResult<TResult>> TryAsync<TSource, TResult>(
+        public static async Task<MethodResult<TResult>> TryAsync<TSource, TResult> (
             this Task<TSource> @this,
             Func<TSource, Task<TResult>> function,
             int numOfTry
-        )
-        {
+        ) {
             var t = await @this;
-          return await TryAsync(() => function(t), numOfTry);
+            return await TryAsync (() => function (t), numOfTry);
         }
 
         public static Task<MethodResult<TResult>> TryAsync<TSource, TResult> (
@@ -162,14 +168,13 @@ namespace FunctionalUtility.Extensions {
             int numOfTry
         ) => TryAsync (() => function (@this), numOfTry);
 
-        public static async Task<MethodResult<TResult>> TryAsync<TSource, TResult>(
+        public static async Task<MethodResult<TResult>> TryAsync<TSource, TResult> (
             this Task<TSource> @this,
             Func<TSource, Task<MethodResult<TResult>>> function,
             int numOfTry
-        )
-        {
+        ) {
             var t = await @this;
-            return await TryAsync(() => function(t), numOfTry);
+            return await TryAsync (() => function (t), numOfTry);
         }
 
         public static Task<MethodResult> TryAsync<TSource> (
@@ -177,14 +182,14 @@ namespace FunctionalUtility.Extensions {
             Func<TSource, Task> function,
             int numOfTry
         ) => TryAsync (() => function (@this), numOfTry);
-        
+
         public static async Task<MethodResult> TryAsync<TSource> (
             this Task<TSource> @this,
             Func<TSource, Task> function,
             int numOfTry
         ) {
             var t = await @this;
-            return await TryAsync(() => function(t), numOfTry);
+            return await TryAsync (() => function (t), numOfTry);
         }
 
         public static Task<MethodResult> TryAsync<TSource> (
@@ -192,14 +197,14 @@ namespace FunctionalUtility.Extensions {
             Func<TSource, Task<MethodResult>> function,
             int numOfTry
         ) => TryAsync (() => function (@this), numOfTry);
-        
+
         public static async Task<MethodResult> TryAsync<TSource> (
             this Task<TSource> @this,
             Func<TSource, Task<MethodResult>> function,
             int numOfTry
         ) {
             var t = await @this;
-            return await TryAsync(() => function(t), numOfTry);
+            return await TryAsync (() => function (t), numOfTry);
         }
 
         #endregion

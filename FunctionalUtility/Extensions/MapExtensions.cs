@@ -354,7 +354,8 @@ namespace FunctionalUtility.Extensions {
                 return onSuccessFunction (@this);
 
             } catch (Exception e) {
-                return MethodResult<TResult>.Fail (new ExceptionError (e, e.Message));
+                return MethodResult<TResult>.Fail (new ExceptionError (e,
+                    moreDetails : new { thisObj = @this }));
             }
         }
 
@@ -388,7 +389,8 @@ namespace FunctionalUtility.Extensions {
                 var result = onSuccessFunction ();
                 return MethodResult<TResult>.Ok (result);
             } catch (Exception e) {
-                return onFailFunction (new ExceptionError (e, e.Message));
+                return MethodResult<TResult>.Fail (new ExceptionError (e,
+                    moreDetails : new { thisObj = @this }));
             }
         }
 
