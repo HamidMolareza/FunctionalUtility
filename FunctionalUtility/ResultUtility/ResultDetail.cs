@@ -3,12 +3,12 @@ using System.Collections.Generic;
 namespace FunctionalUtility.ResultUtility {
     public class ResultDetail {
         public ResultDetail (int statusCode, string title,
-            string? message = null, object ? moreDetail = null) {
+            string? message = null, object ? moreDetails = null) {
             StatusCode = statusCode;
             Title = title;
             Message = message ?? "No data.";
-            if (moreDetail != null)
-                MoreDetails = new List<object> { moreDetail };
+            if (moreDetails != null)
+                MoreDetails = new List<object> { moreDetails };
         }
 
         public int StatusCode { get; }

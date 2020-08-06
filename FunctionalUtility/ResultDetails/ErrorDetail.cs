@@ -7,8 +7,8 @@ namespace FunctionalUtility.ResultDetails {
     public class ErrorDetail : ResultDetail {
         public ErrorDetail (int statusCode, string? title = null,
             string? message = null, Exception? exception = null,
-            bool showDefaultMessageToUser = true, object? moreDetail = null) : base (
-            statusCode, title?? "Error", message ?? "No Data.", moreDetail : moreDetail) {
+            bool showDefaultMessageToUser = true, object? moreDetails = null) : base (
+            statusCode, title?? "Error", message ?? "No Data.", moreDetails : moreDetails) {
             Exception = exception;
             ShowDefaultMessageToUser = showDefaultMessageToUser;
         }

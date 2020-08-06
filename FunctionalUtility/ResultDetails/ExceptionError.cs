@@ -7,6 +7,6 @@ namespace FunctionalUtility.ResultDetails {
         public ExceptionError (Exception exception, string? title = null,
                 string? message = null, object ? moreDetails = null):
             base (StatusCodes.Status500InternalServerError, title ?? nameof (ExceptionError),
-                message?? "An exception has occurred.", exception : exception, moreDetail : moreDetails) { }
+                message?? "An exception has occurred.", exception : exception, moreDetails : moreDetails) { }
     }
 }
