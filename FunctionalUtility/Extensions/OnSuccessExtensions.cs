@@ -629,39 +629,39 @@ namespace FunctionalUtility.Extensions {
 
         public static MethodResult<T> OnSuccessFailWhen<T> (
             this MethodResult<T> @this,
-            Func<T, bool> function,
+            Func<T, bool> predicate,
             ErrorDetail errorDetail
-        ) => @this.OnSuccess (source => function (source) ? MethodResult<T>.Fail (errorDetail) : @this);
-        
+        ) => @this.OnSuccess (source => predicate (source) ? MethodResult<T>.Fail (errorDetail) : @this);
+
         public static MethodResult<T> OnSuccessFailWhen<T> (
             this MethodResult<T> @this,
-            Func<T, bool> function,
-            Func<T,ErrorDetail> errorDetail
-        ) => @this.OnSuccess (source => function (source) ? MethodResult<T>.Fail (errorDetail(source)) : @this);
+            Func<T, bool> predicate,
+            Func<T, ErrorDetail> errorDetail
+        ) => @this.OnSuccess (source => predicate (source) ? MethodResult<T>.Fail (errorDetail (source)) : @this);
 
         public static MethodResult<T> OnSuccessFailWhen<T> (
             this MethodResult<T> @this,
             Func<bool> predicate,
             ErrorDetail errorDetail
         ) => @this.OnSuccess (() => predicate () ? MethodResult<T>.Fail (errorDetail) : @this);
-        
+
         public static MethodResult<T> OnSuccessFailWhen<T> (
             this MethodResult<T> @this,
             Func<bool> predicate,
-            Func<T,ErrorDetail> errorDetail
-        ) => @this.OnSuccess (source => predicate () ? MethodResult<T>.Fail (errorDetail(source)) : @this);
+            Func<T, ErrorDetail> errorDetail
+        ) => @this.OnSuccess (source => predicate () ? MethodResult<T>.Fail (errorDetail (source)) : @this);
 
         public static MethodResult<T> OnSuccessFailWhen<T> (
             this MethodResult<T> @this,
             bool predicate,
             ErrorDetail errorDetail
         ) => @this.OnSuccess (() => predicate ? MethodResult<T>.Fail (errorDetail) : @this);
-        
+
         public static MethodResult<T> OnSuccessFailWhen<T> (
             this MethodResult<T> @this,
             bool predicate,
-            Func<T,ErrorDetail> errorDetail
-        ) => @this.OnSuccess (source => predicate ? MethodResult<T>.Fail (errorDetail(source)) : @this);
+            Func<T, ErrorDetail> errorDetail
+        ) => @this.OnSuccess (source => predicate ? MethodResult<T>.Fail (errorDetail (source)) : @this);
 
         public static MethodResult OnSuccessFailWhen (
             this MethodResult @this,
@@ -680,36 +680,36 @@ namespace FunctionalUtility.Extensions {
             Func<T, MethodResult> predicate,
             ErrorDetail errorDetail
         ) => @this.OnSuccess (source => predicate (source).IsSuccess ? MethodResult<T>.Fail (errorDetail) : @this);
-        
+
         public static MethodResult<T> OnSuccessFailWhen<T> (
             this MethodResult<T> @this,
             Func<T, MethodResult> predicate,
-            Func<T,ErrorDetail> errorDetail
-        ) => @this.OnSuccess (source => predicate (source).IsSuccess ? MethodResult<T>.Fail (errorDetail(source)) : @this);
+            Func<T, ErrorDetail> errorDetail
+        ) => @this.OnSuccess (source => predicate (source).IsSuccess ? MethodResult<T>.Fail (errorDetail (source)) : @this);
 
         public static MethodResult<T> OnSuccessFailWhen<T> (
             this MethodResult<T> @this,
             Func<MethodResult> predicate,
             ErrorDetail errorDetail
         ) => @this.OnSuccess (() => predicate ().IsSuccess ? MethodResult<T>.Fail (errorDetail) : @this);
-        
+
         public static MethodResult<T> OnSuccessFailWhen<T> (
             this MethodResult<T> @this,
             Func<MethodResult> predicate,
-            Func<T,ErrorDetail> errorDetail
-        ) => @this.OnSuccess (source => predicate ().IsSuccess ? MethodResult<T>.Fail (errorDetail(source)) : @this);
+            Func<T, ErrorDetail> errorDetail
+        ) => @this.OnSuccess (source => predicate ().IsSuccess ? MethodResult<T>.Fail (errorDetail (source)) : @this);
 
         public static MethodResult<T> OnSuccessFailWhen<T> (
             this MethodResult<T> @this,
             MethodResult predicate,
             ErrorDetail errorDetail
         ) => @this.OnSuccess (() => predicate.IsSuccess ? MethodResult<T>.Fail (errorDetail) : @this);
-        
+
         public static MethodResult<T> OnSuccessFailWhen<T> (
             this MethodResult<T> @this,
             MethodResult predicate,
-            Func<T,ErrorDetail> errorDetail
-        ) => @this.OnSuccess (source => predicate.IsSuccess ? MethodResult<T>.Fail (errorDetail(source)) : @this);
+            Func<T, ErrorDetail> errorDetail
+        ) => @this.OnSuccess (source => predicate.IsSuccess ? MethodResult<T>.Fail (errorDetail (source)) : @this);
 
         #endregion
 
@@ -733,13 +733,13 @@ namespace FunctionalUtility.Extensions {
             ErrorDetail errorDetail
         ) => @this.OnSuccessAsync (source => predicate (source) ?
             MethodResult<T>.Fail (errorDetail) : MethodResult<T>.Ok (source));
-        
+
         public static Task<MethodResult<T>> OnSuccessFailWhenAsync<T> (
             this Task<MethodResult<T>> @this,
             Func<T, bool> predicate,
-            Func<T,ErrorDetail> errorDetail
+            Func<T, ErrorDetail> errorDetail
         ) => @this.OnSuccessAsync (source => predicate (source) ?
-            MethodResult<T>.Fail (errorDetail(source)) : MethodResult<T>.Ok (source));
+            MethodResult<T>.Fail (errorDetail (source)) : MethodResult<T>.Ok (source));
 
         public static Task<MethodResult<T>> OnSuccessFailWhenAsync<T> (
             this Task<MethodResult<T>> @this,
@@ -747,13 +747,13 @@ namespace FunctionalUtility.Extensions {
             ErrorDetail errorDetail
         ) => @this.OnSuccessAsync (source => predicate () ?
             MethodResult<T>.Fail (errorDetail) : MethodResult<T>.Ok (source));
-        
+
         public static Task<MethodResult<T>> OnSuccessFailWhenAsync<T> (
             this Task<MethodResult<T>> @this,
             Func<bool> predicate,
-            Func<T,ErrorDetail> errorDetail
+            Func<T, ErrorDetail> errorDetail
         ) => @this.OnSuccessAsync (source => predicate () ?
-            MethodResult<T>.Fail (errorDetail(source)) : MethodResult<T>.Ok (source));
+            MethodResult<T>.Fail (errorDetail (source)) : MethodResult<T>.Ok (source));
 
         public static Task<MethodResult<T>> OnSuccessFailWhenAsync<T> (
             this Task<MethodResult<T>> @this,
@@ -761,13 +761,13 @@ namespace FunctionalUtility.Extensions {
             ErrorDetail errorDetail
         ) => @this.OnSuccessAsync (source => predicate ?
             MethodResult<T>.Fail (errorDetail) : MethodResult<T>.Ok (source));
-        
+
         public static Task<MethodResult<T>> OnSuccessFailWhenAsync<T> (
             this Task<MethodResult<T>> @this,
             bool predicate,
-            Func<T,ErrorDetail> errorDetail
+            Func<T, ErrorDetail> errorDetail
         ) => @this.OnSuccessAsync (source => predicate ?
-            MethodResult<T>.Fail (errorDetail(source)) : MethodResult<T>.Ok (source));
+            MethodResult<T>.Fail (errorDetail (source)) : MethodResult<T>.Ok (source));
 
         public static Task<MethodResult> OnSuccessFailWhenAsync (
             this Task<MethodResult> @this,
@@ -787,13 +787,13 @@ namespace FunctionalUtility.Extensions {
             ErrorDetail errorDetail
         ) => @this.OnSuccessAsync (source => predicate (source).IsSuccess ?
             MethodResult<T>.Fail (errorDetail) : MethodResult<T>.Ok (source));
-        
+
         public static Task<MethodResult<T>> OnSuccessFailWhenAsync<T> (
             this Task<MethodResult<T>> @this,
             Func<T, MethodResult> predicate,
-            Func<T,ErrorDetail> errorDetail
+            Func<T, ErrorDetail> errorDetail
         ) => @this.OnSuccessAsync (source => predicate (source).IsSuccess ?
-            MethodResult<T>.Fail (errorDetail(source)) : MethodResult<T>.Ok (source));
+            MethodResult<T>.Fail (errorDetail (source)) : MethodResult<T>.Ok (source));
 
         public static Task<MethodResult<T>> OnSuccessFailWhenAsync<T> (
             this Task<MethodResult<T>> @this,
@@ -801,13 +801,13 @@ namespace FunctionalUtility.Extensions {
             ErrorDetail errorDetail
         ) => @this.OnSuccessAsync (source => predicate ().IsSuccess ?
             MethodResult<T>.Fail (errorDetail) : MethodResult<T>.Ok (source));
-        
+
         public static Task<MethodResult<T>> OnSuccessFailWhenAsync<T> (
             this Task<MethodResult<T>> @this,
             Func<MethodResult> predicate,
-            Func<T,ErrorDetail> errorDetail
+            Func<T, ErrorDetail> errorDetail
         ) => @this.OnSuccessAsync (source => predicate ().IsSuccess ?
-            MethodResult<T>.Fail (errorDetail(source)) : MethodResult<T>.Ok (source));
+            MethodResult<T>.Fail (errorDetail (source)) : MethodResult<T>.Ok (source));
 
         public static Task<MethodResult<T>> OnSuccessFailWhenAsync<T> (
             this Task<MethodResult<T>> @this,
@@ -815,13 +815,13 @@ namespace FunctionalUtility.Extensions {
             ErrorDetail errorDetail
         ) => @this.OnSuccessAsync (source => predicate.IsSuccess ?
             MethodResult<T>.Fail (errorDetail) : MethodResult<T>.Ok (source));
-        
+
         public static Task<MethodResult<T>> OnSuccessFailWhenAsync<T> (
             this Task<MethodResult<T>> @this,
             MethodResult predicate,
-            Func<T,ErrorDetail> errorDetail
+            Func<T, ErrorDetail> errorDetail
         ) => @this.OnSuccessAsync (source => predicate.IsSuccess ?
-            MethodResult<T>.Fail (errorDetail(source)) : MethodResult<T>.Ok (source));
+            MethodResult<T>.Fail (errorDetail (source)) : MethodResult<T>.Ok (source));
 
         #endregion
 
@@ -892,13 +892,13 @@ namespace FunctionalUtility.Extensions {
             this MethodResult<T> @this,
             Func<MethodResult> predicate,
             Func<MethodResult<T>> operation
-        ) => @this.OnSuccess (() => OperateExtensions.OperateWhen (predicate, operation));
+        ) => @this.OnSuccess (() => @this.OperateWhen (predicate, operation));
 
         public static MethodResult<T> OnSuccessOperateWhen<T> (
             this MethodResult<T> @this,
             Func<T, MethodResult> predicate,
             Func<MethodResult<T>> operation
-        ) => @this.OnSuccess (value => @this.OperateWhen (predicate (value), operation));
+        ) => @this.OnSuccess (value => value.OperateWhen (predicate, operation));
 
         public static MethodResult<T> OnSuccessOperateWhen<T> (
             this MethodResult<T> @this,

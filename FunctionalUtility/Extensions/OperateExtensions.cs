@@ -32,6 +32,12 @@ namespace FunctionalUtility.Extensions {
         ) => predicate ? function () : MethodResult<T>.Ok (@this);
 
         public static MethodResult<T> OperateWhen<T> (
+            this MethodResult<T> @this,
+            Func<MethodResult> predicate,
+            Func<MethodResult<T>> operation
+        ) => predicate ().IsSuccess ? operation () : @this;
+
+        public static MethodResult<T> OperateWhen<T> (
             this T @this,
             Func<bool> predicate,
             Func<MethodResult<T>> function
@@ -94,82 +100,51 @@ namespace FunctionalUtility.Extensions {
         public static MethodResult OperateWhen (
             Func<MethodResult> predicate,
             Func<MethodResult> function
-        ) => predicate ().OnSuccess (function);
-
-        public static MethodResult<T> OperateWhen<T> (
-            Func<MethodResult> predicate,
-            Func<MethodResult<T>> function
-        ) => predicate ().OnSuccess (function);
+        ) => predicate ().IsSuccess ? function () : MethodResult.Ok ();
 
         public static MethodResult OperateWhen (
             Func<MethodResult> predicate,
             Action action
-        ) => predicate ().OnSuccess (action);
+        ) {
+            if (predicate ().IsSuccess)
+                action ();
+            return MethodResult.Ok ();
+        }
 
         public static MethodResult OperateWhen (
             MethodResult predicate,
             Func<MethodResult> function
-        ) => predicate.OnSuccess (function);
+        ) => predicate.IsSuccess ? function () : MethodResult.Ok ();
 
         public static MethodResult<T> OperateWhen<T> (
             this T @this,
-            MethodResult predicate,
-            Func<MethodResult> function
-        ) => predicate.OnSuccess (function).MapMethodResult (@this);
-
-        public static MethodResult<T> OperateWhen<T> (
-            this T @this,
-            Func<MethodResult> predicate,
-            Func<MethodResult> function
-        ) => predicate ().OnSuccess (function).MapMethodResult (@this);
-
-        public static MethodResult<T> OperateWhen<T> (
-            this T _,
             Func<MethodResult> predicate,
             Func<MethodResult<T>> function
-        ) => predicate ().OnSuccess (function);
+        ) => predicate ().IsSuccess ? function () : MethodResult<T>.Ok (@this);
 
         public static MethodResult<T> OperateWhen<T> (
             this T @this,
             Func<T, MethodResult> predicate,
             Func<MethodResult<T>> function
-        ) => predicate (@this).OnSuccess (function);
+        ) => predicate (@this).IsSuccess ? function () : MethodResult<T>.Ok (@this);
 
         public static MethodResult<T> OperateWhen<T> (
             this T @this,
             Func<MethodResult> predicate,
             Func<T, MethodResult<T>> function
-        ) => predicate ().OnSuccess (() => function (@this));
-
-        public static MethodResult<T> OperateWhen<T> (
-            this T @this,
-            Func<T, MethodResult> predicate,
-            Func<MethodResult> function
-        ) => predicate (@this).OnSuccess (function).MapMethodResult (@this);
+        ) => predicate ().IsSuccess ? function (@this) : MethodResult<T>.Ok (@this);
 
         public static MethodResult<T> OperateWhen<T> (
             this T @this,
             MethodResult predicate,
             Func<T, MethodResult<T>> function
-        ) => predicate.OnSuccess (() => function (@this));
-
-        public static MethodResult<T> OperateWhen<T> (
-            this T @this,
-            MethodResult predicate,
-            Func<T, MethodResult> function
-        ) => predicate.OnSuccess (() => function (@this)).MapMethodResult (@this);
+        ) => predicate.IsSuccess ? function (@this) : MethodResult<T>.Ok (@this);
 
         public static MethodResult<T> OperateWhen<T> (
             this T @this,
             Func<T, MethodResult> predicate,
             Func<T, MethodResult<T>> function
-        ) => predicate (@this).OnSuccess (() => function (@this));
-
-        public static MethodResult<T> OperateWhen<T> (
-            this T @this,
-            Func<T, MethodResult> predicate,
-            Func<T, MethodResult> function
-        ) => predicate (@this).OnSuccess (() => function (@this)).MapMethodResult (@this);
+        ) => predicate (@this).IsSuccess ? function (@this) : MethodResult<T>.Ok (@this);
 
         public static T OperateWhen<T> (
             this T @this,
@@ -271,7 +246,11 @@ namespace FunctionalUtility.Extensions {
             this T @this,
             MethodResult predicate,
             Action action
-        ) => predicate.OnSuccess (action).MapMethodResult (@this);
+        ) {
+            if (predicate.IsSuccess)
+                action ();
+            return MethodResult<T>.Ok (@this);
+        }
 
         public static T OperateWhen<T> (
                 this T @this,
@@ -283,7 +262,11 @@ namespace FunctionalUtility.Extensions {
             this T @this,
             Func<T, MethodResult> predicate,
             Action action
-        ) => predicate (@this).OnSuccess (action).MapMethodResult (@this);
+        ) {
+            if (predicate (@this).IsSuccess)
+                action ();
+            return MethodResult<T>.Ok (@this);
+        }
 
         public static T OperateWhen<T> (
                 this T @this,
@@ -295,7 +278,11 @@ namespace FunctionalUtility.Extensions {
             this T @this,
             MethodResult predicate,
             Action<T> action
-        ) => predicate.OnSuccess (() => action (@this)).MapMethodResult (@this);
+        ) {
+            if (predicate.IsSuccess)
+                action (@this);
+            return MethodResult<T>.Ok (@this);
+        }
 
         public static T OperateWhen<T> (
                 this T @this,
@@ -307,7 +294,11 @@ namespace FunctionalUtility.Extensions {
             this T @this,
             Func<T, MethodResult> predicate,
             Action<T> action
-        ) => predicate (@this).OnSuccess (() => action (@this)).MapMethodResult (@this);
+        ) {
+            if (predicate (@this).IsSuccess)
+                action (@this);
+            return MethodResult<T>.Ok (@this);
+        }
 
         #endregion
 
@@ -699,10 +690,11 @@ namespace FunctionalUtility.Extensions {
             this T @this,
             MethodResult predicate,
             Func<MethodResult> function
-        ) => predicate.OnSuccess (function).MapMethodResult (
-            onSuccessFunction: () => MethodResult<T>.Ok (@this),
-            onFailFunction : MethodResult<T>.Fail
-        );
+        ) {
+            if (predicate.IsSuccess)
+                function ();
+            return MethodResult<T>.Ok (@this);
+        }
 
         public static T TeeOperateWhen<T> (
             this T @this,
@@ -732,25 +724,41 @@ namespace FunctionalUtility.Extensions {
             this T @this,
             MethodResult predicate,
             Action action
-        ) => predicate.OnSuccess (action).Map (@this);
+        ) {
+            if (predicate.IsSuccess)
+                action ();
+            return @this;
+        }
 
         public static T TeeOperateWhen<T> (
             this T @this,
             Func<T, MethodResult> predicate,
             Action action
-        ) => predicate (@this).OnSuccess (action).Map (@this);
+        ) {
+            if (predicate (@this).IsSuccess)
+                action ();
+            return @this;
+        }
 
         public static T TeeOperateWhen<T> (
             this T @this,
             MethodResult predicate,
             Action<T> action
-        ) => predicate.OnSuccess (() => action (@this)).Map (@this);
+        ) {
+            if (predicate.IsSuccess)
+                action (@this);
+            return @this;
+        }
 
         public static T TeeOperateWhen<T> (
             this T @this,
             Func<T, MethodResult> predicate,
             Action<T> action
-        ) => predicate (@this).OnSuccess (() => action (@this)).Map (@this);
+        ) {
+            if (predicate (@this).IsSuccess)
+                action (@this);
+            return @this;
+        }
 
         public static async Task<T> TeeOperateWhenAsync<T> (
             this T @this,
