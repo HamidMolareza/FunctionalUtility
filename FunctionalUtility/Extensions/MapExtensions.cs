@@ -12,20 +12,6 @@ namespace FunctionalUtility.Extensions {
             this TSource @this,
             Func<TSource, TResult> function) => function (@this);
 
-        public static TSource Map<TSource> (
-            this TSource @this,
-            Action action) {
-            action ();
-            return @this;
-        }
-
-        public static TSource Map<TSource> (
-            this TSource @this,
-            Action<TSource> action) {
-            action (@this);
-            return @this;
-        }
-
         public static TResult Map<TSource, TResult> (
             this TSource _,
             Func<TResult> function) => function ();
@@ -263,101 +249,23 @@ namespace FunctionalUtility.Extensions {
         #region TryMap
 
         public static MethodResult<TResult> TryMap<TSource, TResult> (
-            this TSource @this,
-            Func<TSource, TResult> function) => @this.Try (function);
-
-        public static MethodResult TryMap (
-            Action onSuccessFunction
-        ) {
-            try {
-
-                onSuccessFunction ();
-                return MethodResult.Ok ();
-
-            } catch (Exception e) {
-                return MethodResult.Fail (new ExceptionError (e, e.Message));
-            }
-        }
-
-        public static MethodResult TryMap<TSource> (
-            this TSource _,
-            Action onSuccessFunction
-        ) {
-            try {
-
-                onSuccessFunction ();
-                return MethodResult.Ok ();
-
-            } catch (Exception e) {
-                return MethodResult.Fail (new ExceptionError (e, e.Message));
-            }
-        }
-
-        public static MethodResult<TResult> TryMap<TSource, TResult> (
             this TSource _,
             Func<MethodResult<TResult>> onSuccessFunction
-        ) {
-            try {
-
-                return onSuccessFunction ();
-
-            } catch (Exception e) {
-                return MethodResult<TResult>.Fail (new ExceptionError (e, e.Message));
-            }
-        }
-
-        public static MethodResult<TResult> TryMap<TResult> (
-            Func<MethodResult<TResult>> onSuccessFunction
-        ) {
-            try {
-
-                return onSuccessFunction ();
-
-            } catch (Exception e) {
-                return MethodResult<TResult>.Fail (new ExceptionError (e, e.Message));
-            }
-        }
+        ) => TryExtensions.Try (onSuccessFunction);
 
         public static MethodResult<TResult> TryMap<TSource, TResult> (
             this TSource _,
             Func<TResult> onSuccessFunction
-        ) {
-            try {
-
-                var result = onSuccessFunction ();
-                return MethodResult<TResult>.Ok (result);
-
-            } catch (Exception e) {
-                return MethodResult<TResult>.Fail (new ExceptionError (e, e.Message));
-            }
-        }
-
-        public static MethodResult<TResult> TryMap<TResult> (
-            Func<TResult> onSuccessFunction
-        ) {
-            try {
-
-                var result = onSuccessFunction ();
-                return MethodResult<TResult>.Ok (result);
-
-            } catch (Exception e) {
-                return MethodResult<TResult>.Fail (new ExceptionError (e, e.Message));
-            }
-        }
+        ) => TryExtensions.Try (onSuccessFunction);
 
         public static MethodResult<TResult> TryMap<TSource, TResult> (
             this TSource @this,
-            Func<TSource, MethodResult<TResult>> onSuccessFunction
-        ) {
-            try {
+            Func<TSource, TResult> function) => TryExtensions.Try (() => function (@this));
 
-                return onSuccessFunction (@this);
-
-            } catch (Exception e) {
-                return MethodResult<TResult>.Fail (new ExceptionError (e,
-                    moreDetails : new { thisObj = @this }));
-            }
-        }
+        public static MethodResult<TResult> TryMap<TSource, TResult> (
+                this TSource @this,
+                Func<TSource, MethodResult<TResult>> function) =>
+            TryExtensions.Try (() => function (@this));
 
         #endregion
 
@@ -427,18 +335,6 @@ namespace FunctionalUtility.Extensions {
 
         public static async Task<MethodResult<TResult>> TryMapAsync<TSource, TResult> (
             this Task<TSource> @this,
-            Func<TSource, MethodResult<TResult>> onSuccessFunction
-        ) {
-            try {
-                var source = await @this;
-                return onSuccessFunction (source);
-            } catch (Exception e) {
-                return MethodResult<TResult>.Fail (new ExceptionError (e, e.Message));
-            }
-        }
-
-        public static async Task<MethodResult<TResult>> TryMapAsync<TSource, TResult> (
-            this Task<TSource> @this,
             Func<TSource, Task<MethodResult<TResult>>> onSuccessFunction
         ) {
             try {
@@ -449,18 +345,10 @@ namespace FunctionalUtility.Extensions {
             }
         }
 
-        public static async Task<MethodResult<TResult>> TryMapAsync<TSource, TResult> (
+        public static Task<MethodResult<TResult>> TryMapAsync<TSource, TResult> (
             this TSource @this,
             Func<TSource, Task<MethodResult<TResult>>> onSuccessFunction
-        ) {
-            try {
-
-                return await onSuccessFunction (@this);
-
-            } catch (Exception e) {
-                return MethodResult<TResult>.Fail (new ExceptionError (e, e.Message));
-            }
-        }
+        ) => TryExtensions.TryAsync (() => onSuccessFunction (@this));
 
         public static async Task<MethodResult<TResult>> TryMapAsync<TSource, TResult> (
             this Task<TSource> @this,
@@ -477,19 +365,10 @@ namespace FunctionalUtility.Extensions {
             }
         }
 
-        public static async Task<MethodResult<TResult>> TryMapAsync<TSource, TResult> (
+        public static Task<MethodResult<TResult>> TryMapAsync<TSource, TResult> (
             this TSource @this,
             Func<TSource, Task<TResult>> onSuccessFunction
-        ) {
-            try {
-
-                var result = await onSuccessFunction (@this);
-                return MethodResult<TResult>.Ok (result);
-
-            } catch (Exception e) {
-                return MethodResult<TResult>.Fail (new ExceptionError (e, e.Message));
-            }
-        }
+        ) => TryExtensions.TryAsync (() => onSuccessFunction (@this));
 
         public static async Task<MethodResult> TryMapAsync<TSource> (
             this Task<TSource> @this,
@@ -536,36 +415,6 @@ namespace FunctionalUtility.Extensions {
 
             } catch (Exception) {
                 return onFailFunction ();
-            }
-        }
-
-        public static async Task<MethodResult> TryMapAsync<TSource> (
-            this Task<TSource> @this,
-            Action<TSource> onSuccessFunction
-        ) {
-            try {
-
-                var source = await @this;
-                onSuccessFunction (source);
-                return MethodResult.Ok ();
-
-            } catch (Exception e) {
-                return MethodResult.Fail (new ExceptionError (e, e.Message));
-            }
-        }
-
-        public static async Task<MethodResult> TryMapAsync<TSource> (
-            this Task<TSource> @this,
-            Action onSuccessFunction
-        ) {
-            try {
-
-                await @this;
-                onSuccessFunction ();
-                return MethodResult.Ok ();
-
-            } catch (Exception e) {
-                return MethodResult.Fail (new ExceptionError (e, e.Message));
             }
         }
 
@@ -633,19 +482,6 @@ namespace FunctionalUtility.Extensions {
 
         public static async Task<MethodResult<TResult>> TryMapAsync<TSource, TResult> (
             this TSource _,
-            Func<Task<TResult>> onSuccessFunction
-        ) {
-            try {
-
-                var result = await onSuccessFunction ();
-                return MethodResult<TResult>.Ok (result);
-
-            } catch (Exception e) {
-                return MethodResult<TResult>.Fail (new ExceptionError (e, e.Message));
-            }
-        }
-
-        public static async Task<MethodResult<TResult>> TryMapAsync<TResult> (
             Func<Task<TResult>> onSuccessFunction
         ) {
             try {
@@ -731,29 +567,16 @@ namespace FunctionalUtility.Extensions {
             }
         }
 
-        public static async Task<MethodResult> TryMapAsync (
-            this Task @this,
-            Action onSuccessFunction
-        ) {
-            try {
-
-                await @this;
-                onSuccessFunction ();
-                return MethodResult.Ok ();
-
-            } catch (Exception e) {
-                return MethodResult.Fail (new ExceptionError (e, e.Message));
-            }
-        }
-
         public static async Task<MethodResult<TResult>> TryMapAsync<TSource, TResult> (
             this Task<TSource> @this,
             Func<TSource, MethodResult<TResult>> onSuccessFunction,
             Func<ResultDetail, MethodResult<TResult>> onFailFunction
         ) {
             try {
+
                 var source = await @this;
                 return onSuccessFunction (source);
+
             } catch (Exception e) {
                 return onFailFunction (new ExceptionError (e, e.Message));
             }
@@ -780,8 +603,10 @@ namespace FunctionalUtility.Extensions {
             Func<MethodResult<TResult>> onFailFunction
         ) {
             try {
+
                 var source = await @this;
                 return onSuccessFunction (source);
+
             } catch (Exception) {
                 return onFailFunction ();
             }
@@ -832,82 +657,47 @@ namespace FunctionalUtility.Extensions {
             }
         }
 
-        public static async Task<MethodResult> TryMapAsync (
-            this Task @this,
-            Func<MethodResult> onSuccessFunction
-        ) {
-            try {
-
-                await @this;
-                return onSuccessFunction ();
-
-            } catch (Exception e) {
-                return MethodResult.Fail (new ExceptionError (e, e.Message));
-            }
-        }
-
-        public static async Task<MethodResult> TryMapAsync (
-            this Task @this,
-            Func<Task<MethodResult>> onSuccessFunction
-        ) {
-            try {
-
-                await @this;
-                return await onSuccessFunction ();
-
-            } catch (Exception e) {
-                return MethodResult.Fail (new ExceptionError (e, e.Message));
-            }
-        }
-
-        public static async Task<MethodResult<TResult>> TryMapAsync<TResult> (
-            Func<Task<MethodResult<TResult>>> onSuccessFunction
-        ) {
-            try {
-
-                return await onSuccessFunction ();
-
-            } catch (Exception e) {
-                return MethodResult<TResult>.Fail (new ExceptionError (e, e.Message));
-            }
-        }
-
-        public static async Task<MethodResult> TryMapAsync<TSource> (
+        public static Task<MethodResult> TryMapAsync<TSource> (
             this TSource _,
             Func<Task<MethodResult>> onSuccessFunction
-        ) {
-            try {
+        ) => TryExtensions.TryAsync (onSuccessFunction);
 
-                return await onSuccessFunction ();
-
-            } catch (Exception e) {
-                return MethodResult.Fail (new ExceptionError (e, e.Message));
-            }
-        }
-
-        public static async Task<MethodResult> TryMapAsync (
-            Func<Task<MethodResult>> onSuccessFunction
-        ) {
-            try {
-
-                return await onSuccessFunction ();
-
-            } catch (Exception e) {
-                return MethodResult.Fail (new ExceptionError (e, e.Message));
-            }
-        }
-
-        public static async Task<MethodResult> TryMapAsync<TSource> (
+        public static Task<MethodResult<TResult>> TryMapAsync<TSource, TResult> (
             this TSource @this,
-            Func<TSource, Task<MethodResult>> onSuccessFunction
+            Func<TSource, Task<TResult>> function,
+            int numOfTry
+        ) => TryExtensions.TryAsync (() => function (@this), numOfTry);
+
+        public static async Task<MethodResult<TResult>> TryMapAsync<TSource, TResult> (
+            this Task<TSource> @this,
+            Func<TSource, Task<TResult>> function,
+            int numOfTry
         ) {
-            try {
+            var t = await @this;
+            return await TryExtensions.TryAsync (() => function (t), numOfTry);
+        }
 
-                return await onSuccessFunction (@this);
+        public static Task<MethodResult<TResult>> TryMapAsync<TSource, TResult> (
+            this TSource @this,
+            Func<TSource, Task<MethodResult<TResult>>> function,
+            int numOfTry
+        ) => TryExtensions.TryAsync (() => function (@this), numOfTry);
 
-            } catch (Exception e) {
-                return MethodResult.Fail (new ExceptionError (e, e.Message));
-            }
+        public static async Task<MethodResult<TResult>> TryMapAsync<TSource, TResult> (
+            this Task<TSource> @this,
+            Func<TSource, Task<MethodResult<TResult>>> function,
+            int numOfTry
+        ) {
+            var t = await @this;
+            return await TryExtensions.TryAsync (() => function (t), numOfTry);
+        }
+
+        public static async Task<MethodResult<TResult>> TryMapAsync<TSource, TResult> (
+            this Task<TSource> @this,
+            Func<TSource, MethodResult<TResult>> function
+        ) {
+            var t = await @this;
+            return TryExtensions.Try (() => function (t));
         }
 
         #endregion
@@ -1100,35 +890,6 @@ namespace FunctionalUtility.Extensions {
             var methodResult = await @this;
             return methodResult.IsSuccess ? MethodResult.Ok () : MethodResult.Fail (methodResult.Detail);
         }
-
-        #endregion
-
-        #region TryMapOnSuccess
-
-        public static MethodResult TryMapOnSuccess (
-            this MethodResult @this,
-            Action action
-        ) => @this.OnSuccess (() => TryExtensions.Try (action));
-
-        public static MethodResult TryMapOnSuccess<T> (
-            this MethodResult<T> @this,
-            Action action
-        ) => @this.OnSuccess (() => TryExtensions.Try (action));
-
-        public static MethodResult TryMapOnSuccess<T> (
-            this MethodResult<T> @this,
-            Action<T> action
-        ) => @this.OnSuccess (source => source.Try (action));
-
-        public static MethodResult<TResult> TryMapOnSuccess<TSource, TResult> (
-            this MethodResult<TSource> @this,
-            Func<TResult> function
-        ) => @this.OnSuccess (() => TryExtensions.Try (function));
-
-        public static MethodResult<TResult> TryMapOnSuccess<TSource, TResult> (
-            this MethodResult<TSource> @this,
-            Func<TSource, TResult> function
-        ) => @this.OnSuccess (source => source.Try (function));
 
         #endregion
 

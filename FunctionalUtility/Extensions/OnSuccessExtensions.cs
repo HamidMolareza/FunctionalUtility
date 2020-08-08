@@ -391,7 +391,7 @@ namespace FunctionalUtility.Extensions {
         public static MethodResult<TResult> TryOnSuccess<TSource, TResult> (
                 this MethodResult<TSource> @this,
                 Func<TSource, TResult> success) =>
-            @this.OnSuccess (source => source.Try (success));
+            @this.OnSuccess (source => source.TryMap (success));
 
         public static MethodResult<TResult> TryOnSuccess<TSource, TResult> (
                 this MethodResult<TSource> @this,
@@ -406,7 +406,7 @@ namespace FunctionalUtility.Extensions {
         public static MethodResult<TResult> TryOnSuccess<TSource, TResult> (
                 this MethodResult<TSource> @this,
                 Func<TSource, MethodResult<TResult>> success) =>
-            @this.OnSuccess (source => source.Try (success));
+            @this.OnSuccess (source => source.TryMap (success));
 
         public static MethodResult<TResult> TryOnSuccess<TSource, TResult> (
                 this MethodResult<TSource> @this,
@@ -453,13 +453,13 @@ namespace FunctionalUtility.Extensions {
             this Task<MethodResult<TSource>> @this,
             Func<TSource, Task<TResult>> success,
             int numOfTry
-        ) => @this.OnSuccessAsync (source => source.TryAsync (success, numOfTry));
+        ) => @this.OnSuccessAsync (source => source.TryMapAsync (success, numOfTry));
 
         public static Task<MethodResult<TResult>> TryOnSuccessAsync<TSource, TResult> (
             this Task<MethodResult<TSource>> @this,
             Func<TSource, Task<MethodResult<TResult>>> success,
             int numOfTry
-        ) => @this.OnSuccessAsync (source => source.TryAsync (success, numOfTry));
+        ) => @this.OnSuccessAsync (source => source.TryMapAsync (success, numOfTry));
 
         public static Task<MethodResult<TResult>> TryOnSuccessAsync<TSource, TResult> (
             this Task<MethodResult<TSource>> @this,
@@ -512,7 +512,7 @@ namespace FunctionalUtility.Extensions {
         public static Task<MethodResult<TResult>> TryOnSuccessAsync<TSource, TResult> (
             this Task<MethodResult<TSource>> @this,
             Func<TSource, TResult> success
-        ) => @this.OnSuccessAsync (source => source.Try (success));
+        ) => @this.OnSuccessAsync (source => source.TryMap (success));
 
         public static Task<MethodResult<TResult>> TryOnSuccessAsync<TSource, TResult> (
             this Task<MethodResult<TSource>> @this,
@@ -549,7 +549,7 @@ namespace FunctionalUtility.Extensions {
             this MethodResult<TSource> @this,
             Func<TSource, Task<TResult>> success,
             int numOfTry = 1
-        ) => @this.OnSuccessAsync (source => source.TryAsync (success, numOfTry));
+        ) => @this.OnSuccessAsync (source => source.TryMapAsync (success, numOfTry));
 
         public static Task<MethodResult<TResult>> TryOnSuccessAsync<TSource, TResult> (
             this MethodResult<TSource> @this,
@@ -585,7 +585,7 @@ namespace FunctionalUtility.Extensions {
             this MethodResult<TSource> @this,
             Func<TSource, Task<MethodResult<TResult>>> success,
             int numOfTry = 1
-        ) => @this.OnSuccessAsync (source => source.TryAsync (success, numOfTry));
+        ) => @this.OnSuccessAsync (source => source.TryMapAsync (success, numOfTry));
 
         public static Task<MethodResult<TResult>> TryOnSuccessAsync<TSource, TResult> (
             this MethodResult<TSource> @this,

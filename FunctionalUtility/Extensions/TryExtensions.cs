@@ -17,14 +17,12 @@ namespace FunctionalUtility.Extensions {
             }
         }
 
-        public static MethodResult<TResult> Try<TSource, TResult> (
-            this TSource @this,
-            Func<TSource, TResult> function) {
+        public static MethodResult Try (
+            Func<MethodResult> function) {
             try {
-                return MethodResult<TResult>.Ok (function (@this));
+                return function ();
             } catch (Exception e) {
-                return MethodResult<TResult>.Fail (new ExceptionError (e,
-                    moreDetails : new { thisSource = @this }));
+                return MethodResult.Fail (new ExceptionError (e, message : e.Message));
             }
         }
 
@@ -34,17 +32,6 @@ namespace FunctionalUtility.Extensions {
                 return function ();
             } catch (Exception e) {
                 return MethodResult<TResult>.Fail (new ExceptionError (e, message : e.Message));
-            }
-        }
-
-        public static MethodResult<TResult> Try<TSource, TResult> (
-            this TSource @this,
-            Func<TSource, MethodResult<TResult>> function) {
-            try {
-                return function (@this);
-            } catch (Exception e) {
-                return MethodResult<TResult>.Fail (new ExceptionError (e,
-                    moreDetails : new { thisSource = @this }));
             }
         }
 
@@ -147,41 +134,133 @@ namespace FunctionalUtility.Extensions {
             }
         }
 
-        public static Task<MethodResult<TResult>> TryAsync<TSource, TResult> (
-            this TSource @this,
-            Func<TSource, Task<TResult>> function,
-            int numOfTry
-        ) => TryAsync (() => function (@this), numOfTry);
-
-        public static async Task<MethodResult<TResult>> TryAsync<TSource, TResult> (
-            this Task<TSource> @this,
-            Func<TSource, Task<TResult>> function,
-            int numOfTry
-        ) {
-            var t = await @this;
-            return await TryAsync (() => function (t), numOfTry);
-        }
-
-        public static Task<MethodResult<TResult>> TryAsync<TSource, TResult> (
-            this TSource @this,
-            Func<TSource, Task<MethodResult<TResult>>> function,
-            int numOfTry
-        ) => TryAsync (() => function (@this), numOfTry);
-
-        public static async Task<MethodResult<TResult>> TryAsync<TSource, TResult> (
-            this Task<TSource> @this,
-            Func<TSource, Task<MethodResult<TResult>>> function,
-            int numOfTry
-        ) {
-            var t = await @this;
-            return await TryAsync (() => function (t), numOfTry);
-        }
-
         public static Task<MethodResult> TryAsync<TSource> (
             this TSource @this,
             Func<TSource, Task> function,
             int numOfTry
         ) => TryAsync (() => function (@this), numOfTry);
+
+        public static async Task<MethodResult> TryAsync<TSource> (
+            this Task<TSource> @this,
+            Action<TSource> onSuccessFunction
+        ) {
+            try {
+
+                var source = await @this;
+                onSuccessFunction (source);
+                return MethodResult.Ok ();
+
+            } catch (Exception e) {
+                return MethodResult.Fail (new ExceptionError (e, e.Message));
+            }
+        }
+
+        public static async Task<MethodResult> TryAsync<TSource> (
+            this Task<TSource> @this,
+            Action onSuccessFunction
+        ) {
+            try {
+
+                await @this;
+                onSuccessFunction ();
+                return MethodResult.Ok ();
+
+            } catch (Exception e) {
+                return MethodResult.Fail (new ExceptionError (e, e.Message));
+            }
+        }
+
+        public static async Task<MethodResult<T>> TryAsync<T> (
+            Func<Task<T>> onSuccessFunction
+        ) {
+            try {
+
+                var result = await onSuccessFunction ();
+                return MethodResult<T>.Ok (result);
+
+            } catch (Exception e) {
+                return MethodResult<T>.Fail (new ExceptionError (e, e.Message));
+            }
+        }
+
+        public static async Task<MethodResult> TryAsync (
+            this Task @this,
+            Action onSuccessFunction
+        ) {
+            try {
+
+                await @this;
+                onSuccessFunction ();
+                return MethodResult.Ok ();
+
+            } catch (Exception e) {
+                return MethodResult.Fail (new ExceptionError (e, e.Message));
+            }
+        }
+        public static async Task<MethodResult> TryAsync (
+            Func<Task<MethodResult>> onSuccessFunction
+        ) {
+            try {
+
+                return await onSuccessFunction ();
+
+            } catch (Exception e) {
+                return MethodResult.Fail (new ExceptionError (e, e.Message));
+            }
+        }
+
+        public static async Task<MethodResult> TryAsync<T> (
+            this T @this,
+            Func<T, Task<MethodResult>> onSuccessFunction
+        ) {
+            try {
+
+                return await onSuccessFunction (@this);
+
+            } catch (Exception e) {
+                return MethodResult.Fail (new ExceptionError (e, e.Message));
+            }
+        }
+
+        public static async Task<MethodResult> TryAsync (
+            this Task @this,
+            Func<MethodResult> onSuccessFunction
+        ) {
+            try {
+
+                await @this;
+                return onSuccessFunction ();
+
+            } catch (Exception e) {
+                return MethodResult.Fail (new ExceptionError (e, e.Message));
+            }
+        }
+
+        public static async Task<MethodResult> TryAsync (
+            this Task @this,
+            Func<Task<MethodResult>> onSuccessFunction
+        ) {
+            try {
+
+                await @this;
+                return await onSuccessFunction ();
+
+            } catch (Exception e) {
+                return MethodResult.Fail (new ExceptionError (e, e.Message));
+            }
+        }
+
+        public static async Task<MethodResult<TResult>> TryAsync<TResult> (
+            Func<Task<MethodResult<TResult>>> onSuccessFunction
+        ) {
+            try {
+
+                return await onSuccessFunction ();
+
+            } catch (Exception e) {
+                return MethodResult<TResult>.Fail (new ExceptionError (e, e.Message));
+            }
+        }
 
         public static async Task<MethodResult> TryAsync<TSource> (
             this Task<TSource> @this,

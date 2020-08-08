@@ -15,7 +15,7 @@ namespace FunctionalUtility.Extensions {
         public static MethodResult FailWhen (
             Func<bool> predicate,
             ErrorDetail errorDetail
-        ) => predicate () ? MethodResult.Fail (errorDetail) : MethodResult.Ok ();
+        ) => FailWhen (predicate (), errorDetail);
 
         public static MethodResult FailWhen (
             MethodResult predicate,
@@ -25,7 +25,7 @@ namespace FunctionalUtility.Extensions {
         public static MethodResult FailWhen (
             Func<MethodResult> predicate,
             ErrorDetail errorDetail
-        ) => predicate ().IsSuccess ? MethodResult.Fail (errorDetail) : MethodResult.Ok ();
+        ) => FailWhen (predicate (), errorDetail);
 
         public static MethodResult<T> FailWhen<T> (
             this T @this,
@@ -43,25 +43,25 @@ namespace FunctionalUtility.Extensions {
             this T @this,
             Func<T, bool> predicate,
             ErrorDetail errorDetail
-        ) => predicate (@this) ? MethodResult<T>.Fail (errorDetail) : MethodResult<T>.Ok (@this);
+        ) => @this.FailWhen (predicate (@this), errorDetail);
 
         public static MethodResult<T> FailWhen<T> (
             this T @this,
             Func<T, bool> predicate,
             Func<T, ErrorDetail> errorDetail
-        ) => predicate (@this) ? MethodResult<T>.Fail (errorDetail (@this)) : MethodResult<T>.Ok (@this);
+        ) => @this.FailWhen (predicate (@this), errorDetail);
 
         public static MethodResult<T> FailWhen<T> (
             this T @this,
             Func<bool> predicate,
             ErrorDetail errorDetail
-        ) => predicate () ? MethodResult<T>.Fail (errorDetail) : MethodResult<T>.Ok (@this);
+        ) => @this.FailWhen (predicate (), errorDetail);
 
         public static MethodResult<T> FailWhen<T> (
             this T @this,
             Func<bool> predicate,
             Func<T, ErrorDetail> errorDetail
-        ) => predicate () ? MethodResult<T>.Fail (errorDetail (@this)) : MethodResult<T>.Ok (@this);
+        ) => @this.FailWhen (predicate (), errorDetail);
 
         public static MethodResult<T> FailWhen<T> (
             this T @this,
@@ -79,25 +79,25 @@ namespace FunctionalUtility.Extensions {
             this T @this,
             Func<MethodResult> predicate,
             ErrorDetail errorDetail
-        ) => predicate ().IsSuccess ? MethodResult<T>.Fail (errorDetail) : MethodResult<T>.Ok (@this);
+        ) => @this.FailWhen (predicate ().IsSuccess, errorDetail);
 
         public static MethodResult<T> FailWhen<T> (
             this T @this,
             Func<MethodResult> predicate,
             Func<T, ErrorDetail> errorDetail
-        ) => predicate ().IsSuccess ? MethodResult<T>.Fail (errorDetail (@this)) : MethodResult<T>.Ok (@this);
+        ) => @this.FailWhen (predicate ().IsSuccess, errorDetail);
 
         public static MethodResult<T> FailWhen<T> (
             this T @this,
             Func<T, MethodResult> predicate,
             ErrorDetail errorDetail
-        ) => predicate (@this).IsSuccess ? MethodResult<T>.Fail (errorDetail) : MethodResult<T>.Ok (@this);
+        ) => @this.FailWhen (predicate (@this), errorDetail);
 
         public static MethodResult<T> FailWhen<T> (
             this T @this,
             Func<T, MethodResult> predicate,
             Func<T, ErrorDetail> errorDetail
-        ) => predicate (@this).IsSuccess ? MethodResult<T>.Fail (errorDetail (@this)) : MethodResult<T>.Ok (@this);
+        ) => @this.FailWhen (predicate (@this), errorDetail);
 
         #endregion
 
