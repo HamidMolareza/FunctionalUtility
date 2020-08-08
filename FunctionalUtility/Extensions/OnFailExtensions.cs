@@ -141,14 +141,9 @@ namespace FunctionalUtility.Extensions {
         }
 
         public static MethodResult<T> TryOnFail<T> (
-            this MethodResult<T> @this,
-            Func<MethodResult<T>> fail) {
-            if (@this.IsSuccess)
-                return @this;
-
-            return TryExtensions.Try (
-                () => fail ());
-        }
+                this MethodResult<T> @this,
+                Func<MethodResult<T>> fail) =>
+            @this.IsSuccess ? @this : TryExtensions.Try (fail);
 
         public static MethodResult TryOnFail (
             this MethodResult @this,
@@ -161,24 +156,14 @@ namespace FunctionalUtility.Extensions {
         }
 
         public static MethodResult TryOnFail (
-            this MethodResult @this,
-            Func<MethodResult> fail) {
-            if (@this.IsSuccess)
-                return @this;
-
-            return TryExtensions.Try (
-                () => fail ());
-        }
+                this MethodResult @this,
+                Func<MethodResult> fail) =>
+            @this.IsSuccess ? @this : TryExtensions.Try (fail);
 
         public static MethodResult TryOnFail (
-            this MethodResult @this,
-            Action fail) {
-            if (@this.IsSuccess)
-                return @this;
-
-            return TryExtensions.Try (
-                () => fail ());
-        }
+                this MethodResult @this,
+                Action fail) =>
+            @this.IsSuccess ? @this : TryExtensions.Try (fail);
 
         public static MethodResult<T> TryOnFail<T> (
             this MethodResult<T> @this,
@@ -274,7 +259,7 @@ namespace FunctionalUtility.Extensions {
             this MethodResult @this,
             bool predicate,
             MethodResult result
-        ) => @this.OnFail (result => predicate ? result : @this);
+        ) => @this.OnFail (() => predicate ? result : @this);
 
         public static MethodResult OnFailOperateWhen (
             this MethodResult @this,
@@ -298,7 +283,7 @@ namespace FunctionalUtility.Extensions {
             this MethodResult<T> @this,
             bool predicate,
             MethodResult<T> result
-        ) => @this.OnFail (result => predicate ? result : @this);
+        ) => @this.OnFail (() => predicate ? result : @this);
 
         public static MethodResult<T> OnFailOperateWhen<T> (
             this MethodResult<T> @this,
