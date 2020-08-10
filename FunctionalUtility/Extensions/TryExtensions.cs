@@ -51,8 +51,7 @@ namespace FunctionalUtility.Extensions {
                 action (@this);
                 return MethodResult.Ok ();
             } catch (Exception e) {
-                return MethodResult.Fail (new ExceptionError (e,
-                    moreDetails : new { thisSource = @this }));
+                return MethodResult.Fail (new ExceptionError (e));
             }
         }
 

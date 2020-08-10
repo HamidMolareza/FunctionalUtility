@@ -297,8 +297,7 @@ namespace FunctionalUtility.Extensions {
                 var result = onSuccessFunction ();
                 return MethodResult<TResult>.Ok (result);
             } catch (Exception e) {
-                return MethodResult<TResult>.Fail (new ExceptionError (e,
-                    moreDetails : new { thisObj = @this }));
+                return MethodResult<TResult>.Fail (new ExceptionError (e));
             }
         }
 
