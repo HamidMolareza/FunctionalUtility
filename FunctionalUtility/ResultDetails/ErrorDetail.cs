@@ -8,13 +8,15 @@ namespace FunctionalUtility.ResultDetails {
             string? message = null, Exception? exception = null,
             bool showDefaultMessageToUser = true, object? moreDetails = null) : base (
             statusCode, title?? "Error", message ?? "No Data.", moreDetails : moreDetails) {
-            Exception = exception;
             ShowDefaultMessageToUser = showDefaultMessageToUser;
+            if (exception != null)
+                Exception = new ExceptionData (exception);
         }
 
         protected bool ShowDefaultMessageToUser { get; }
+
         public StackTrace StackTrace { get; } = new StackTrace (1, true);
-        public Exception? Exception { get; }
+        public ExceptionData? Exception { get; }
 
         public override object GetViewModel () =>
             ShowDefaultMessageToUser ?

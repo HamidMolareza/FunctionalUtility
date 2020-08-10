@@ -5,14 +5,14 @@ using FunctionalUtility.ResultUtility;
 
 namespace FunctionalUtility.Extensions {
     public static class ThrowExceptionExtensions {
-       
+
         #region ThrowException
-        
+
         public static void ThrowException (this ResultDetail @this) {
             throw @this
             switch {
-                ExceptionError exceptionError when exceptionError.Exception != null => exceptionError.Exception,
-                ErrorDetail errorDetail => new Exception (JsonSerializer.Serialize (errorDetail)),
+                ExceptionError exceptionError when exceptionError.Exception != null => exceptionError.GetMainException (),
+                    ErrorDetail errorDetail => new Exception (JsonSerializer.Serialize (errorDetail)),
                     _ => new Exception (JsonSerializer.Serialize (@this)),
             };
         }
