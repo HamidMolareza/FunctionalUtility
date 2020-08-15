@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FunctionalUtility.ResultDetails {
+namespace FunctionalUtility.ResultDetails.Errors {
     public class ExceptionError : InternalError {
         public ExceptionError (Exception exception, string? title = null,
                 string? message = null, object? moreDetails = null):

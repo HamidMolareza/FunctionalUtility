@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using FunctionalUtility.ResultDetails;
+using FunctionalUtility.ResultDetails.Errors;
 using FunctionalUtility.ResultUtility;
 
 namespace FunctionalUtility.Extensions {

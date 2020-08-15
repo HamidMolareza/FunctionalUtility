@@ -1,5 +1,6 @@
 ﻿using System;
 using FunctionalUtility.ResultDetails;
+using FunctionalUtility.ResultDetails.Errors;
 using FunctionalUtility.ResultUtility;
 
 namespace FunctionalUtility.Extensions {

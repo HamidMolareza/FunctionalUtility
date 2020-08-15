@@ -1,7 +1,7 @@
 using System;
 using Microsoft.AspNetCore.Http;
 
-namespace FunctionalUtility.ResultDetails {
+namespace FunctionalUtility.ResultDetails.Errors {
     public class InternalError : ErrorDetail {
         public InternalError (string? title = null, string? message = null,
             Exception? exception = null, bool showDefaultMessageToUser = true,

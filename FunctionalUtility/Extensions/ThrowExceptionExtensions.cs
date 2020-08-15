@@ -1,6 +1,7 @@
 using System;
 using System.Text.Json;
 using FunctionalUtility.ResultDetails;
+using FunctionalUtility.ResultDetails.Errors;
 using FunctionalUtility.ResultUtility;
 
 namespace FunctionalUtility.Extensions {

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
 
-namespace FunctionalUtility.ResultDetails {
-    public class ExceptionData {
+namespace FunctionalUtility.ResultDetails.Errors {
+    public sealed class ExceptionData {
         public ExceptionData (Exception exception) {
             StackTrace = exception.StackTrace;
             Source = exception.Source;
@@ -64,14 +64,14 @@ namespace FunctionalUtility.ResultDetails {
         // Returns:
         //     An object that implements the System.Collections.IDictionary interface and contains
         //     a collection of user-defined key/value pairs. The default is an empty collection.
-        public virtual IDictionary Data { get; }
+        public IDictionary Data { get; }
         //
         // Summary:
         //     Gets or sets a link to the help file associated with this exception.
         //
         // Returns:
         //     The Uniform Resource Name (URN) or Uniform Resource Locator (URL).
-        public virtual string? HelpLink { get; }
+        public string? HelpLink { get; }
 
     }
 }

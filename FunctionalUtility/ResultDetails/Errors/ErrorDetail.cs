@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using FunctionalUtility.ResultUtility;
 
-namespace FunctionalUtility.ResultDetails {
+namespace FunctionalUtility.ResultDetails.Errors {
     public class ErrorDetail : ResultDetail {
         public ErrorDetail (int statusCode, string? title = null,
             string? message = null, Exception? exception = null,
