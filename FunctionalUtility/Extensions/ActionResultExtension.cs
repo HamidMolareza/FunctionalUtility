@@ -24,7 +24,7 @@ namespace FunctionalUtility.Extensions {
             ResultDetail detail, bool isDevelopMode) {
             if (isSuccess)
                 return value;
-            return !isDevelopMode ? detail.GetViewModel () : new { ResultInProductMode = detail.GetViewModel (), AllDetails = (object) detail };
+            return !isDevelopMode ? (object) new { Result = detail.GetViewModel () } : new { Result = detail.GetViewModel (), AllDetails = detail };
         }
     }
 

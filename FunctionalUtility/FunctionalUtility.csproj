@@ -2,7 +2,7 @@
 
   <PropertyGroup>
   <PackageId>FunctionalUtility</PackageId>
-  <Version>1.1.4</Version>
+  <Version>1.1.5</Version>
   <PackageTags>Functional; Function; </PackageTags>
   <Authors>Hamid Molareza</Authors>
   <RepositoryUrl>https://github.com/HamidMolareza/FunctionalUtility</RepositoryUrl>
