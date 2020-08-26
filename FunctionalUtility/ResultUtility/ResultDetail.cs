@@ -18,6 +18,8 @@ namespace FunctionalUtility.ResultUtility {
 
         public virtual object GetViewModel () =>
             new { StatusCode, Title, Message };
+        public virtual string GetViewTitle () => Title;
+        public virtual string GetViewMessage () => Message;
 
         public void AddDetail (object newDetail) {
             if (newDetail is null)

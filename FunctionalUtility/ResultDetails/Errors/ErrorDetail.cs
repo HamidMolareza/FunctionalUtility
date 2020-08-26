@@ -20,7 +20,10 @@ namespace FunctionalUtility.ResultDetails.Errors {
 
         public override object GetViewModel () =>
             ShowDefaultMessageToUser ?
-            new { StatusCode, Title = "Error!", Message = "something went wrong." } :
+            new { StatusCode, Title = GetViewTitle (), Message = GetViewMessage () } :
             new { StatusCode, Title, Message };
+
+        public override string GetViewTitle () => "Error!";
+        public override string GetViewMessage () => "something went wrong.";
     }
 }
