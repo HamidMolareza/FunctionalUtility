@@ -1,5 +1,4 @@
 using System.Text.RegularExpressions;
-using FunctionalUtility.ResultDetails;
 using FunctionalUtility.ResultDetails.Errors;
 using FunctionalUtility.ResultUtility;
 using Microsoft.AspNetCore.Http;

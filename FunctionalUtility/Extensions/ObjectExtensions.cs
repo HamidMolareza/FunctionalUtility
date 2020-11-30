@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using FunctionalUtility.ResultDetails;
 using FunctionalUtility.ResultDetails.Errors;
 using FunctionalUtility.ResultUtility;
 using Microsoft.AspNetCore.Http;
